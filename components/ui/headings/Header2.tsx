@@ -4,7 +4,7 @@ import { viagram, swily } from "@/fonts/fonts";
 
 function Header2({ texts }: { readonly texts: SpecialText[] }) {
   return (
-    <h2 className="text-[35vw] leading-none">
+    <h2 className="text-[12vw] lg:text-[8vw] leading-[0.75]">
       {texts.map((item, i) => {
         return (
           <span

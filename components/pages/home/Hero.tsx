@@ -1,14 +1,14 @@
 import React from "react";
 import Image from "next/image";
 import Header1 from "@/components/ui/headings/Header1";
-import Koi from "@/public/images/koi_crop.jpg";
+import Koi from "@/public/images/home/koi_crop.jpg";
 import Header5 from "@/components/ui/headings/Header5";
 import BlurEffect from "@/components/ui/animations/BlurEffect";
 import HeroSpread from "@/components/ui/animations/HeroSpread";
 
 function Hero() {
   return (
-    <section>
+    <section className="xl:min-h-screen">
       <div className="flex justify-center relative">
         <BlurEffect>
           <Header1 text="aora" />

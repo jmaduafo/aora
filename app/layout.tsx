@@ -20,7 +20,7 @@ export default function RootLayout({
         className={`${montrealBook.className} bg-background text-foreground antialiased relative`}
       >
         <Navbar />
-        <main className="px-6 min-h-screen">{children}</main>
+        <main className="px-6">{children}</main>
         <Footer />
       </body>
     </html>
