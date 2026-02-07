@@ -1,5 +1,4 @@
 import React from "react";
-import Header5 from "../headings/Header5";
 import Header6 from "../headings/Header6";
 
 function BookButton({ text }: { readonly text: string }) {

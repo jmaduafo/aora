@@ -8,7 +8,7 @@ import Link from "next/link";
 
 function Navbar() {
   return (
-    <header className="sticky top-0 flex justify-between items-center py-4 px-6 bg-background">
+    <header className="sticky top-0 flex justify-between items-center py-5 px-6 bg-background">
       <button>
         <Header6 text="Menu" className={`${montrealMedium.className}`} />
       </button>
