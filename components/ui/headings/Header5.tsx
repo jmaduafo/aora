@@ -7,7 +7,7 @@ function Header5({
   readonly text: string;
   readonly className?: string;
 }) {
-  return <h5 className={`${className} text-sm uppercase`}>{text}</h5>;
+  return <h5 className={`${className} text-[15px] lg:text-xl uppercase`}>{text}</h5>;
 }
 
 export default Header5;

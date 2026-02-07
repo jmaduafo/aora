@@ -10,7 +10,7 @@ function Header1({
 }) {
   return (
     <h1
-      className={`${viagram.className} ${className} text-[50vw] leading-none`}
+      className={`${viagram.className} ${className} text-[40vw] leading-none`}
     >
       {text}
     </h1>

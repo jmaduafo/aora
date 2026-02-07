@@ -7,7 +7,7 @@ function Header3({
   readonly text: string;
   readonly className?: string;
 }) {
-  return <h3 className={`${className} text-xl uppercase`}>{text}</h3>;
+  return <h3 className={`${className} text-[40px] uppercase`}>{text}</h3>;
 }
 
 export default Header3;

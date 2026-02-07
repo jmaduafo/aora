@@ -7,7 +7,7 @@ function Header4({
   readonly text: string;
   readonly className?: string;
 }) {
-  return <h4 className={`${className} text-base uppercase`}>{text}</h4>;
+  return <h4 className={`${className} text-2xl uppercase`}>{text}</h4>;
 }
 
 export default Header4;

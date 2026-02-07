@@ -11,7 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 model Product {
@@ -24,7 +24,7 @@ model Product {
   description    String
   keyIngredients String[]
   ingredients    String
-  sizes          Int[]
+  sizes          String[]
   amountSold     Int                    @default(0)
   warnings       String[]
   howToUse       String[]

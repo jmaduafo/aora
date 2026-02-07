@@ -2,15 +2,18 @@ import React from "react";
 import { montrealMedium } from "@/fonts/fonts";
 import Image from "next/image";
 import Logo from "@/public/images/logo.png";
-import Header6 from "../headings/Header6";
 import BookButton from "../buttons/BookButton";
 import Link from "next/link";
+import FlipText from "../animations/FlipText";
+import Paragraph from "../headings/Paragraph";
 
 function Navbar() {
   return (
-    <header className="sticky top-0 flex justify-between items-center py-5 px-6 bg-background">
+    <header className="z-50 sticky top-0 flex justify-between items-center py-5 px-6">
       <button>
-        <Header6 text="Menu" className={`${montrealMedium.className}`} />
+        <FlipText>
+          <Paragraph text="Menu" className={`${montrealMedium.className}`} />
+        </FlipText>
       </button>
       <button className="absolute top-1/2 left-1/2 transform -translate-[50%] w-7 2xl:w-9 object-cover object-bottom ">
         <Link href="/">
@@ -19,7 +22,12 @@ function Navbar() {
       </button>
       <div className="flex items-center gap-3">
         <button>
-          <Header6 text="Cart (0)" className={`${montrealMedium.className}`} />
+          <FlipText>
+            <Paragraph
+              text="Cart (0)"
+              className={`${montrealMedium.className}`}
+            />
+          </FlipText>
         </button>
         <div className="hidden sm:block">
           <BookButton text="Book Now" />

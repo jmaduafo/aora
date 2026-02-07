@@ -7,7 +7,7 @@ function Header6({
   readonly text: string;
   readonly className?: string;
 }) {
-  return <h6 className={`${className} text-xs uppercase`}>{text}</h6>;
+  return <h6 className={`${className} text-sm lg:text-base uppercase leading-none`}>{text}</h6>;
 }
 
 export default Header6;
