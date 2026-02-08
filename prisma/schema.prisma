@@ -17,13 +17,13 @@ datasource db {
 model Product {
   id             String                 @id @unique @default(cuid())
   name           String                 @unique
-  price          Int
-  quantity       Int                    @default(0) //  Products in stock
+  prices         Int[]
+  quantity       Int[] //  Products in stock
   images         String[]
   categories     CategoriesOnProducts[]
   description    String
   keyIngredients String[]
-  ingredients    String
+  ingredients    String[]
   sizes          String[]
   amountSold     Int                    @default(0)
   warnings       String[]
@@ -46,8 +46,6 @@ model CategoriesOnProducts {
   productId  String
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId String
-  updatedAt  DateTime @updatedAt
-  createdAt  DateTime @default(now())
 
   @@id([productId, categoryId])
 }
