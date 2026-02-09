@@ -11,7 +11,7 @@ type Card = {
 function ShopCard({ item }: Card) {
   return (
     <div>
-      <div className="overflow-hidden w-full h-[45vh] group">
+      <div className="overflow-hidden w-full h-[50vh] group">
         <div className="w-full h-full relative flex justify-center items-center group-hover:scale-105 duration-400">
           <div
             className="w-full h-full absolute top-0 left-0 bg-cover bg-no-repeat bg-center opacity-50 -z-1"

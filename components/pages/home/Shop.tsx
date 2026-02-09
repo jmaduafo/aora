@@ -2,6 +2,7 @@ import FlipText from "@/components/ui/animations/FlipText";
 import ShopCard from "@/components/ui/cards/ShopCard";
 import Header2 from "@/components/ui/headings/Header2";
 import Header6 from "@/components/ui/headings/Header6";
+import Paragraph from "@/components/ui/headings/Paragraph";
 import { montrealMedium } from "@/fonts/fonts";
 import Link from "next/link";
 import React from "react";
@@ -67,7 +68,7 @@ function Shop() {
   ];
 
   return (
-    <div className="">
+    <>
       {/* TRANSITION SECTION */}
       <section className="my-[25vh]">
         <div className="flex flex-col">
@@ -78,6 +79,9 @@ function Shop() {
             <Header2 texts={transitionLine2} />
           </div>
         </div>
+          <div className="flex justify-center mt-[5vh] pr-[15vw]">
+            <Paragraph className="w-[30%]" text="At AORA, we believe beauty is found in stillness and care. Our curated products invite you to embrace the art of self-renewal, carrying the essence of our spa into your home."/>
+          </div>
       </section>
       <section className="mt-[12vh]">
         <div className="flex justify-end">
@@ -87,7 +91,7 @@ function Shop() {
             </FlipText>
           </Link>
         </div>
-        <div className="grid grid-cols-4 gap-4 mt-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-2">
           {dummyShopData.map((item) => {
             return (
               <Link href={`/shop/${item.id}`} key={item.id}>
@@ -97,7 +101,7 @@ function Shop() {
           })}
         </div>
       </section>
-    </div>
+    </>
   );
 }
 
