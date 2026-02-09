@@ -79,7 +79,7 @@ export const services = [
 export const galleryImages: string[] = []
 
 Array.from({ length: 9 }).forEach((item, i) => {
-    galleryImages.push(`../images/home/gallery${i + 1}.jpg`)
+    galleryImages.push(`/images/home/gallery${i + 1}.jpg`)
 })
 
 

@@ -10,6 +10,7 @@ import Header2 from "@/components/ui/headings/Header2";
 import Paragraph from "@/components/ui/headings/Paragraph";
 import { galleryImages } from "@/utils/data";
 import Autoplay from "embla-carousel-autoplay";
+import Image from "next/image";
 import React from "react";
 
 function Gallery() {
@@ -47,9 +48,18 @@ function Gallery() {
             {galleryImages.map((item, i) => (
               <CarouselItem
                 key={item}
-                className="basis-1/3 h-[45vh] object-bottom bg-cover bg-no-repeat bg-center ml-4"
-                style={{ backgroundImage: `url(${item})` }}
-              ></CarouselItem>
+                className="basis-1/3 h-[50vh] object-bottom object-cover ml-4"
+                // style={{ backgroundImage: `url(${item})` }}
+              >
+                <Image
+                  src={item}
+                  alt={`gallery display ${i + 1}`}
+                  width={200}
+                  height={500}
+                  className="w-full h-full"
+                  priority={i === 0}
+                />
+              </CarouselItem>
             ))}
           </CarouselContent>
           <CarouselPrevious />
