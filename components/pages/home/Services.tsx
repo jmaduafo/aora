@@ -25,7 +25,7 @@ function Services() {
           ]}
         />
       </div>
-      <div className="w-[60%] mx-auto border-b-[1.5px] border-t-[1.5px] mt-[10vh]">
+      <div className="w-full sm:w-[85%] lg:w-[70%] xl:w-[60%] mx-auto border-b-[1.5px] border-t-[1.5px] mt-[10vh]">
         <Accordion type="single" collapsible defaultValue={undefined}>
           {services.map((item, i) => {
             return (
@@ -36,12 +36,12 @@ function Services() {
               >
                 <AccordionTrigger>
                   <Paragraph
-                    text={`${(i + 1).toString().padStart(2, "0")} /`}
+                    text={`${(i + 1).toString().padStart(2, "0")} /`} className="whitespace-nowrap"
                   />
                   <FlipText>
-                    <Header3 text={item.name} />
+                    <Header3 text={item.name} className="text-center"/>
                   </FlipText>
-                  <Paragraph text={item.duration + " mins"} />
+                  <Paragraph text={item.duration + " mins"} className="whitespace-nowrap"/>
                 </AccordionTrigger>
                 <AccordionContent>
                   <span className="flex flex-col gap-2 items-center">
