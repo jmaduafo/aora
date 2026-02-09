@@ -10,7 +10,7 @@ type Card = {
 
 function ShopCard({ item }: Card) {
   return (
-    <div>
+    <div className="">
       <div className="overflow-hidden w-full h-[50vh] group">
         <div className="w-full h-full relative flex justify-center items-center group-hover:scale-105 duration-400">
           <div
@@ -28,8 +28,8 @@ function ShopCard({ item }: Card) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-1 mt-2">
-        <Header6 text={item.name} className={montrealMedium.className} />
+      <div className="flex flex-col gap-1 mt-2 group">
+        <Header6 text={item.name} className={`${montrealMedium.className} group-hover:underline`}/>
         <Header6 text={`$${item.prices[0]}`} />
       </div>
     </div>

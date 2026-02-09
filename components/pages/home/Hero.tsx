@@ -21,6 +21,7 @@ function Hero() {
               src={Koi}
               alt="koi fish swimming"
               className="w-full h-full"
+              placeholder="blur"
             />
           </div>
           <HeroSpread x={10}>

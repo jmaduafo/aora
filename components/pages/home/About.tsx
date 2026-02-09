@@ -47,6 +47,7 @@ function About() {
                 src={About1}
                 alt="woman in bath with red flowers"
                 className="w-full h-full"
+                placeholder="blur"
               />
             </div>
             <div className="flex justify-end mt-6">
@@ -68,6 +69,7 @@ function About() {
                 src={About2}
                 alt="woman in bath with red flowers"
                 className="w-full h-full"
+                placeholder="blur"
               />
             </div>
           </div>

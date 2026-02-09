@@ -4,6 +4,7 @@ import Header2 from "@/components/ui/headings/Header2";
 import Header6 from "@/components/ui/headings/Header6";
 import Paragraph from "@/components/ui/headings/Paragraph";
 import { montrealMedium } from "@/fonts/fonts";
+import { createSlug } from "@/utils/helpers";
 import Link from "next/link";
 import React from "react";
 
@@ -94,7 +95,7 @@ function Shop() {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-2">
           {dummyShopData.map((item) => {
             return (
-              <Link href={`/shop/${item.id}`} key={item.id}>
+              <Link href={`/shop/${createSlug(item.name)}`} key={item.id}>
                 <ShopCard item={item} />
               </Link>
             );

@@ -25,8 +25,13 @@ function Services() {
           ]}
         />
       </div>
-      <div className="w-full sm:w-[85%] lg:w-[70%] xl:w-[60%] mx-auto border-b-[1.5px] border-t-[1.5px] mt-[10vh]">
-        <Accordion type="single" collapsible defaultValue={undefined}>
+      <div className="w-full sm:w-[85%] lg:w-[70%] xl:w-[60%] mx-auto mt-[10vh]">
+        <Accordion
+          type="single"
+          collapsible
+          defaultValue={undefined}
+          className="border-b-[1.5px] border-t-[1.5px]"
+        >
           {services.map((item, i) => {
             return (
               <AccordionItem
@@ -36,18 +41,23 @@ function Services() {
               >
                 <AccordionTrigger>
                   <Paragraph
-                    text={`${(i + 1).toString().padStart(2, "0")} /`} className="whitespace-nowrap"
+                    text={`${(i + 1).toString().padStart(2, "0")} /`}
+                    className="whitespace-nowrap"
                   />
                   <FlipText>
-                    <Header3 text={item.name} className="text-center"/>
+                    <Header3 text={item.name} className="text-center" />
                   </FlipText>
-                  <Paragraph text={item.duration + " mins"} className="whitespace-nowrap"/>
+                  <Paragraph
+                    text={item.duration + " mins"}
+                    className="whitespace-nowrap"
+                  />
                 </AccordionTrigger>
                 <AccordionContent>
                   <span className="flex flex-col gap-2 items-center">
                     {item.services.map((service, i) => {
                       return (
-                        <span key={service} className="">
+                        <span key={service} className="inline-flex place-items-center space-x-2">
+                          <span className="inline-flex w-1.5 h-1.5 rounded-xs bg-foreground"></span>
                           <Header6 text={service} />
                         </span>
                       );

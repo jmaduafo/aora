@@ -1,6 +1,5 @@
 export const services = [
   {
-    value: "item-1",
     name: "Signature Ritual",
     duration: 75,
     services: [
@@ -16,7 +15,6 @@ export const services = [
     ],
   },
   {
-    value: "item-2",
     name: "Stillness facial",
     duration: 60,
     services: [
@@ -32,7 +30,6 @@ export const services = [
     ],
   },
   {
-    value: "item-3",
     name: "Deep release massage",
     duration: 90,
     services: [
@@ -48,7 +45,6 @@ export const services = [
     ],
   },
   {
-    value: "item-4",
     name: "Aora body reset",
     duration: 60,
     services: [
@@ -64,7 +60,6 @@ export const services = [
     ],
   },
   {
-    value: "item-5",
     name: "Quiet mind Ritual",
     duration: 45,
     services: [
@@ -80,3 +75,37 @@ export const services = [
     ],
   },
 ];
+
+export const galleryImages: string[] = []
+
+Array.from({ length: 9 }).forEach((item, i) => {
+    galleryImages.push(`../images/home/gallery${i + 1}.jpg`)
+})
+
+
+export const navLinks = [
+    {
+        title: "home",
+        href: "/"
+    },
+    {
+        title: "about",
+        href: "/about"
+    },
+    {
+        title: "shop",
+        href: "/shop"
+    },
+    {
+        title: "services",
+        href: "/#services"
+    },
+    {
+        title: "gallery",
+        href: "/#gallery"
+    },
+    {
+        title: "contact",
+        href: "/"
+    },
+]
