@@ -40,7 +40,7 @@ function About() {
       </section>
       {/* ABOUT SECTION */}
       <section>
-        <div className="w-full sm:w-[85%] md:w-[65%] xl:w-[50%] mx-auto flex gap-8 mt-15">
+        <div className="w-full sm:w-[85%] md:w-[65%] xl:w-[50%] mx-auto flex flex-col-reverse md:flex-row gap-8 mt-15">
           <div className="flex-2">
             <div className="w-full object-cover object-bottom">
               <Image
@@ -52,15 +52,15 @@ function About() {
             </div>
             <div className="flex justify-end mt-6">
               <Paragraph
-                className="w-[16.5em]"
+                className="max-w-[16.5em]"
                 text="We exist to help our guests pause, breathe, and restore. AORA's treatments are designed to melt away stress, awaken the senses, and leave you with a lasting glow, inside and out."
               />
             </div>
           </div>
-          <div className="flex-3 mt-[12vh]">
+          <div className="flex-3 md:mt-[12vh]">
             <div className="flex justify-end mb-6">
               <Paragraph
-                className="w-[22em]"
+                className="max-w-[22em]"
                 text="Rooted in the Japanese art of simplicity and harmony, AORA is more than a spa — it is a retreat for mind and body. Our mission is to offer each guest a space of quiet renewal, where care is both a ritual and a restoration."
               />
             </div>

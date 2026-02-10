@@ -28,7 +28,7 @@ function Gallery() {
       </div>
       <div className="w-full sm:w-[90%] xl:w-[80%] ml-auto mt-8">
         <Paragraph
-          className="w-[16.5em]"
+          className="max-w-[16.5em]"
           text="Explore the serene spaces and thoughtful details that shape the AORA experience, where harmony, light, and care exist in balance."
         />
         {/* GALLERY CAROUSEL */}

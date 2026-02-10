@@ -1,3 +1,5 @@
+import { Package } from "@/types/type";
+
 export const services = [
   {
     name: "Signature Ritual",
@@ -76,36 +78,76 @@ export const services = [
   },
 ];
 
-export const galleryImages: string[] = []
+export const galleryImages: string[] = [];
 
 Array.from({ length: 9 }).forEach((item, i) => {
-    galleryImages.push(`/images/home/gallery${i + 1}.jpg`)
-})
-
+  galleryImages.push(`/images/home/gallery${i + 1}.jpg`);
+});
 
 export const navLinks = [
-    {
-        title: "home",
-        href: "/"
-    },
-    {
-        title: "about",
-        href: "/about"
-    },
-    {
-        title: "shop",
-        href: "/shop"
-    },
-    {
-        title: "services",
-        href: "/#services"
-    },
-    {
-        title: "gallery",
-        href: "/#gallery"
-    },
-    {
-        title: "contact",
-        href: "/"
-    },
-]
+  {
+    title: "home",
+    href: "/",
+  },
+  {
+    title: "about",
+    href: "/about",
+  },
+  {
+    title: "shop",
+    href: "/shop",
+  },
+  {
+    title: "services",
+    href: "/#services",
+  },
+  {
+    title: "gallery",
+    href: "/#gallery",
+  },
+  {
+    title: "contact",
+    href: "/",
+  },
+];
+
+const packages = [
+  {
+    title: "Hikari Ritual",
+    price: 92,
+    duration: 60,
+    description:
+      "A brightening facial and gentle massage designed to restore clarity, hydration, and a natural, healthy glow.",
+    services: [""],
+  },
+  {
+    title: "Mizu Renewal",
+    price: 115,
+    duration: 90,
+    description:
+      "A full-body massage and hydrating facial inspired by water’s calming flow, leaving the body relaxed and refreshed.",
+    services: [""],
+  },
+  {
+    title: "Tsuki Restorative",
+    price: 189,
+    duration: 120,
+    description:
+      "A deeply calming experience combining massage, facial care, and aromatherapy for complete mind and body restoration.",
+    services: [""],
+  },
+  {
+    title: "Kaze Balance",
+    price: 168,
+    duration: 75,
+    description:
+      "Light, flowing massage techniques paired with soothing oils to release tension and restore natural balance.",
+    services: [""],
+  },
+];
+
+export const allPackages: Package[] = [];
+
+packages.forEach((item, i) => {
+  allPackages.push({ ...item, image: `/images/home/package${i + 1}.jpg` });
+});

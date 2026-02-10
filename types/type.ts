@@ -36,3 +36,12 @@ export type CategoriesOnProducts = {
   category:   Category;
   categoryId: string;
 };
+
+export type Package = {
+  title: string;
+  price: number;
+  duration: number;
+  description: string;
+  services?: string[],
+  image: string;
+};

@@ -33,10 +33,10 @@ function Shop() {
       id: "623eweweuyy",
       name: "Facial cleansing cream",
       prices: [75, 35],
-      sizes: ["300 mL", "100 mL",],
+      sizes: ["300 mL", "100 mL"],
       images: [
-          "https://aora-images.s3.eu-north-1.amazonaws.com/Round_Amber_Glass_Pump_Bottle_Mockup.png",
-          "https://aora-images.s3.eu-north-1.amazonaws.com/Cream_Tube.png",
+        "https://aora-images.s3.eu-north-1.amazonaws.com/Round_Amber_Glass_Pump_Bottle_Mockup.png",
+        "https://aora-images.s3.eu-north-1.amazonaws.com/Cream_Tube.png",
       ],
     },
     {
@@ -45,7 +45,7 @@ function Shop() {
       prices: [42],
       sizes: ["51 mL"],
       images: [
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png"
+        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png",
       ],
     },
     {
@@ -54,7 +54,7 @@ function Shop() {
       prices: [50],
       sizes: ["45 mL"],
       images: [
-        "https://aora-images.s3.eu-north-1.amazonaws.com/DROPPER_BOTTLE.png"
+        "https://aora-images.s3.eu-north-1.amazonaws.com/DROPPER_BOTTLE.png",
       ],
     },
     {
@@ -80,9 +80,12 @@ function Shop() {
             <Header2 texts={transitionLine2} />
           </div>
         </div>
-          <div className="flex justify-center mt-[5vh] pr-[15vw]">
-            <Paragraph className="w-[25em]" text="At AORA, we believe beauty is found in stillness and care. Our curated products invite you to embrace the art of self-renewal, carrying the essence of our spa into your home."/>
-          </div>
+        <div className="flex justify-center mt-[5vh] pr-[15vw]">
+          <Paragraph
+            className="max-w-[25em]"
+            text="At AORA, we believe beauty is found in stillness and care. Our curated products invite you to embrace the art of self-renewal, carrying the essence of our spa into your home."
+          />
+        </div>
       </section>
       <section className="mt-[12vh]">
         <div className="flex justify-end">
