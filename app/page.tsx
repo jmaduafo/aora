@@ -1,6 +1,7 @@
 import About from "@/components/pages/home/About";
 import Gallery from "@/components/pages/home/Gallery";
 import Hero from "@/components/pages/home/Hero";
+import Packages from "@/components/pages/home/Packages";
 import Services from "@/components/pages/home/Services";
 import Shop from "@/components/pages/home/Shop";
 
@@ -12,6 +13,7 @@ export default function Home() {
       <Shop/>
       <Services/>
       <Gallery/>
+      <Packages/>
     </>
   );
 }

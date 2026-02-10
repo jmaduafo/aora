@@ -81,7 +81,7 @@ function Shop() {
           </div>
         </div>
           <div className="flex justify-center mt-[5vh] pr-[15vw]">
-            <Paragraph className="w-[30%]" text="At AORA, we believe beauty is found in stillness and care. Our curated products invite you to embrace the art of self-renewal, carrying the essence of our spa into your home."/>
+            <Paragraph className="w-[25em]" text="At AORA, we believe beauty is found in stillness and care. Our curated products invite you to embrace the art of self-renewal, carrying the essence of our spa into your home."/>
           </div>
       </section>
       <section className="mt-[12vh]">

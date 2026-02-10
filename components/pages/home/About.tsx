@@ -52,7 +52,7 @@ function About() {
             </div>
             <div className="flex justify-end mt-6">
               <Paragraph
-                className="w-[85%]"
+                className="w-[16.5em]"
                 text="We exist to help our guests pause, breathe, and restore. AORA's treatments are designed to melt away stress, awaken the senses, and leave you with a lasting glow, inside and out."
               />
             </div>
@@ -60,7 +60,7 @@ function About() {
           <div className="flex-3 mt-[12vh]">
             <div className="flex justify-end mb-6">
               <Paragraph
-                className="w-[75%]"
+                className="w-[22em]"
                 text="Rooted in the Japanese art of simplicity and harmony, AORA is more than a spa — it is a retreat for mind and body. Our mission is to offer each guest a space of quiet renewal, where care is both a ritual and a restoration."
               />
             </div>

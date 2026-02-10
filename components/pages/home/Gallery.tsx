@@ -28,7 +28,7 @@ function Gallery() {
       </div>
       <div className="w-full sm:w-[90%] xl:w-[80%] ml-auto mt-8">
         <Paragraph
-          className="w-[20%]"
+          className="w-[16.5em]"
           text="Explore the serene spaces and thoughtful details that shape the AORA experience, where harmony, light, and care exist in balance."
         />
         {/* GALLERY CAROUSEL */}
@@ -42,14 +42,13 @@ function Gallery() {
             align: "start",
             loop: true,
           }}
-          className="w-full mt-4"
+          className="w-full mt-8"
         >
           <CarouselContent>
             {galleryImages.map((item, i) => (
               <CarouselItem
                 key={item}
-                className="basis-1/3 h-[50vh] object-bottom object-cover ml-4"
-                // style={{ backgroundImage: `url(${item})` }}
+                className="sm:basis-1/2 md:basis-1/3 2xl:basis-1/4 h-[55vh] sm:h-[40vh] md:h-[35vh] lg:h-[45vh] xl:h-[50vh] 2xl:h-[60vh] object-bottom object-cover ml-4"
               >
                 <Image
                   src={item}
