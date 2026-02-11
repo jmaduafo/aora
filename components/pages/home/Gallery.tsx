@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/carousel";
 import Header2 from "@/components/ui/headings/Header2";
 import Paragraph from "@/components/ui/headings/Paragraph";
+import { toBase64, shimmer } from "@/utils/blurDataUrl";
 import { galleryImages } from "@/utils/data";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
@@ -57,6 +58,9 @@ function Gallery() {
                   height={500}
                   className="w-full h-full"
                   priority={i === 0}
+                  blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                    shimmer(200, 500),
+                  )}`}
                 />
               </CarouselItem>
             ))}

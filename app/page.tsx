@@ -1,4 +1,5 @@
 import About from "@/components/pages/home/About";
+import Faq from "@/components/pages/home/Faq";
 import Gallery from "@/components/pages/home/Gallery";
 import Hero from "@/components/pages/home/Hero";
 import Packages from "@/components/pages/home/Packages";
@@ -14,6 +15,7 @@ export default function Home() {
       <Services/>
       <Gallery/>
       <Packages/>
+      <Faq/>
     </>
   );
 }

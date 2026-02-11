@@ -3,6 +3,7 @@ import Image from "next/image";
 import React from "react";
 import Header6 from "../headings/Header6";
 import { montrealMedium } from "@/fonts/fonts";
+import { toBase64, shimmer } from "@/utils/blurDataUrl";
 
 type Card = {
   readonly item: Product;
@@ -24,12 +25,18 @@ function ShopCard({ item }: Card) {
               className="w-full h-full"
               width={200}
               height={500}
+              blurDataURL={`data:image/svg+xml;base64,${toBase64(
+                shimmer(200, 500),
+              )}`}
             />
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-1 mt-2 group">
-        <Header6 text={item.name} className={`${montrealMedium.className} group-hover:underline`}/>
+        <Header6
+          text={item.name}
+          className={`${montrealMedium.className} group-hover:underline`}
+        />
         <Header6 text={`$${item.prices[0]}`} />
       </div>
     </div>

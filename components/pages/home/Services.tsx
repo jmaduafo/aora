@@ -37,7 +37,6 @@ function Services() {
               <AccordionItem
                 value={`item-${i + 1}`}
                 key={item.name}
-                className="border-b-[1.5px]"
               >
                 <AccordionTrigger>
                   <Paragraph
@@ -52,7 +51,7 @@ function Services() {
                     className="whitespace-nowrap"
                   />
                 </AccordionTrigger>
-                <AccordionContent>
+                <AccordionContent className="mt-8">
                   <span className="flex flex-col gap-2 items-center">
                     {item.services.map((service, i) => {
                       return (
