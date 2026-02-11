@@ -45,3 +45,8 @@ export type Package = {
   services?: string[],
   image: string;
 };
+
+export type FooterList = {
+  title: string;
+  href?: string;
+};

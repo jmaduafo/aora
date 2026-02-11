@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { montrealBook } from "@/fonts/fonts";
+import {
+  montrealBook,
+  montrealMedium,
+  montrealThin,
+  swily,
+  viagram,
+} from "@/fonts/fonts";
 import Navbar from "@/components/ui/navbar/Navbar";
 import Footer from "@/components/ui/footer/Footer";
 
@@ -15,10 +21,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${montrealBook.className} bg-background text-foreground antialiased relative`}
-      >
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${montrealBook.variable} ${montrealMedium.variable} ${montrealThin.variable} ${swily.variable} ${viagram.variable}`}
+    >
+      <body className={`font-montrealBook bg-background text-foreground antialiased relative`}>
         <Navbar />
         <main className="px-6">{children}</main>
         <Footer />

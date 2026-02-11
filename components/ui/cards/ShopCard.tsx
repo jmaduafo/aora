@@ -2,7 +2,6 @@ import { Product } from "@/types/type";
 import Image from "next/image";
 import React from "react";
 import Header6 from "../headings/Header6";
-import { montrealMedium } from "@/fonts/fonts";
 import { toBase64, shimmer } from "@/utils/blurDataUrl";
 
 type Card = {
@@ -35,7 +34,7 @@ function ShopCard({ item }: Card) {
       <div className="flex flex-col gap-1 mt-2 group">
         <Header6
           text={item.name}
-          className={`${montrealMedium.className} group-hover:underline`}
+          className={`font-montrealMedium group-hover:underline`}
         />
         <Header6 text={`$${item.prices[0]}`} />
       </div>

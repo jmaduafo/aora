@@ -3,7 +3,6 @@ import ShopCard from "@/components/ui/cards/ShopCard";
 import Header2 from "@/components/ui/headings/Header2";
 import Header6 from "@/components/ui/headings/Header6";
 import Paragraph from "@/components/ui/headings/Paragraph";
-import { montrealMedium } from "@/fonts/fonts";
 import { createSlug } from "@/utils/helpers";
 import Link from "next/link";
 import React from "react";
@@ -91,7 +90,7 @@ function Shop() {
         <div className="flex justify-end">
           <Link href="/shop">
             <FlipText>
-              <Header6 text="Shop All" className={montrealMedium.className} />
+              <Header6 text="Shop All" className="font-montrealMedium" />
             </FlipText>
           </Link>
         </div>

@@ -182,3 +182,48 @@ export const frequent_questions = [
         answer: "Absolutely. Our space is designed to feel welcoming and restorative, whether it’s your first visit or part of a regular ritual."
     },
 ]
+
+export const socials = [
+    {
+        title: "instagram",
+        href: "",
+    },
+    {
+        title: "tiktok",
+        href: ""
+    },
+    {
+        title: "linkedin",
+        href: ""
+    },
+    {
+        title: "facebook",
+        href: ""
+    },
+]
+
+export const legal = [
+    {
+        title: "terms & conditions",
+    },
+    {
+        title: "privacy policy",
+    },
+    {
+        title: "cookies policy",
+    },
+    
+]
+
+export const contact = [
+    {
+        title: "123 Hydrate Drive",
+    },
+    {
+        title: "Chicago, Illinois",
+    },
+    {
+        title: "(123) 456 7890",
+    },
+    
+]

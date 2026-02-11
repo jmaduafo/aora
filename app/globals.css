@@ -33,8 +33,11 @@
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
 
-  /* --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono); */
+  --font-montrealThin: var(--font-montrealThin);
+  --font-montrealBook: var(--font-montrealBook);
+  --font-montrealMedium: var(--font-montrealMedium);
+  --font-swily: var(--font-swily);
+  --font-viagram: var(--font-viagram);
 
   --radius-sm: calc(var(--radius) - 4px);
 

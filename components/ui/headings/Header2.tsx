@@ -1,6 +1,5 @@
 import { SpecialText } from "@/types/type";
 import React from "react";
-import { viagram, swily } from "@/fonts/fonts";
 
 function Header2({ texts }: { readonly texts: SpecialText[] }) {
   return (
@@ -9,7 +8,7 @@ function Header2({ texts }: { readonly texts: SpecialText[] }) {
         return (
           <span
             key={`${item.text}_${i + 1}`}
-            className={`${item.is_special ? swily.className : viagram.className}`}
+            className={`${item.is_special ? "font-swily" : "font-viagram"}`}
           >
             {item.text}
             {i === texts.length - 1 ? "" : " "}

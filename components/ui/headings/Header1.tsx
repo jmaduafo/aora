@@ -1,5 +1,4 @@
 import React from "react";
-import { viagram } from "@/fonts/fonts";
 
 function Header1({
   text,
@@ -10,7 +9,7 @@ function Header1({
 }) {
   return (
     <h1
-      className={`${viagram.className} ${className} text-[40vw] leading-none`}
+      className={`${className} font-viagram text-[40vw] leading-none`}
     >
       {text}
     </h1>
