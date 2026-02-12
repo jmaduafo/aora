@@ -13,7 +13,7 @@ type Card = {
 function PackageCard({ item }: Card) {
   return (
     <div>
-      <div className="w-full h-[45vh] object-cover object-bottom">
+      <div className="w-full h-[55vh] sm:h-[45vh] object-cover object-bottom">
         <Image
           src={item.image}
           alt={item.title}

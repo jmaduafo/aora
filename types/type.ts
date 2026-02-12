@@ -10,7 +10,7 @@ export type Product = {
   prices: number[];
   sizes?: string[];
   images: string[];
-  categories?: CategoriesOnProducts[];
+  categories?: Category[];
   description?: string;
   keyIngredients?: string[];
   ingredients?: string[];
@@ -25,17 +25,17 @@ export type Product = {
 export type Category = {
   id: string;
   name: string;
-  products: CategoriesOnProducts[];
+  products: Product[];
   updatedAt: Date | null;
   createdAt: Date;
 };
 
-export type CategoriesOnProducts = {
-  product:    Product;
-  productId:  string;
-  category:   Category;
-  categoryId: string;
-};
+// export type CategoriesOnProducts = {
+//   product:    Product;
+//   productId:  string;
+//   category:   Category;
+//   categoryId: string;
+// };
 
 export type Package = {
   title: string;

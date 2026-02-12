@@ -5,9 +5,10 @@ import Header6 from "@/components/ui/headings/Header6";
 import Paragraph from "@/components/ui/headings/Paragraph";
 import { createSlug } from "@/utils/helpers";
 import Link from "next/link";
-import React from "react";
+import React, { Fragment } from "react";
+import prisma from "@/prisma/client";
 
-function Shop() {
+async function Shop() {
   const transitionLine1 = [
     {
       text: "Quiet",
@@ -27,45 +28,20 @@ function Shop() {
     },
   ];
 
-  const dummyShopData = [
-    {
-      id: "623eweweuyy",
-      name: "Facial cleansing cream",
-      prices: [75, 35],
-      sizes: ["300 mL", "100 mL"],
-      images: [
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Round_Amber_Glass_Pump_Bottle_Mockup.png",
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Cream_Tube.png",
-      ],
-    },
-    {
-      id: "2737dewdhewdyw",
-      name: "Hydrating Serum",
-      prices: [42],
-      sizes: ["51 mL"],
-      images: [
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png",
-      ],
-    },
-    {
-      id: "092019ejndjwde",
-      name: "Soothing Oil",
-      prices: [50],
-      sizes: ["45 mL"],
-      images: [
-        "https://aora-images.s3.eu-north-1.amazonaws.com/DROPPER_BOTTLE.png",
-      ],
-    },
-    {
-      id: "28718whdwhdwegd",
-      name: "Hand cream",
-      prices: [35],
-      sizes: ["100 mL"],
-      images: [
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Cream_Tube.png",
-      ],
-    },
-  ];
+ const data = await prisma.product.findMany({
+  take: 4,
+  where: {
+    images: {
+      isEmpty: false
+    }
+  },
+  select: {
+    images: true,
+    name: true,
+    id: true,
+    prices: true
+  },
+ })
 
   return (
     <>
@@ -95,11 +71,11 @@ function Shop() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-2">
-          {dummyShopData.map((item) => {
+          {data.map((item) => {
             return (
-              <Link href={`/shop/${createSlug(item.name)}`} key={item.id}>
+              <Fragment key={item.id}>
                 <ShopCard item={item} />
-              </Link>
+              </Fragment>
             );
           })}
         </div>

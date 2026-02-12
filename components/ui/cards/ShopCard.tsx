@@ -3,6 +3,8 @@ import Image from "next/image";
 import React from "react";
 import Header6 from "../headings/Header6";
 import { toBase64, shimmer } from "@/utils/blurDataUrl";
+import Link from "next/link";
+import { createSlug } from "@/utils/helpers";
 
 type Card = {
   readonly item: Product;
@@ -10,7 +12,7 @@ type Card = {
 
 function ShopCard({ item }: Card) {
   return (
-    <div className="">
+    <Link href={`/shop/${createSlug(item.name)}`}>
       <div className="overflow-hidden w-full h-[50vh] group">
         <div className="w-full h-full relative flex justify-center items-center group-hover:scale-105 duration-400">
           <div
@@ -38,7 +40,7 @@ function ShopCard({ item }: Card) {
         />
         <Header6 text={`$${item.prices[0]}`} />
       </div>
-    </div>
+    </Link>
   );
 }
 

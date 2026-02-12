@@ -1,8 +1,9 @@
+import MainPage from '@/components/pages/shop/MainPage'
 import React from 'react'
 
 function page() {
   return (
-    <div>page</div>
+    <MainPage />
   )
 }
 

@@ -14,12 +14,12 @@ function Footer() {
           <List title="Legal terms" list={legal} />
           <List title="Contact Info" list={contact} />
         </div>
-        <p className="uppercase text-[7vw] leading-none font-montrealMedium">
+        <p className="uppercase text-[10vw] lg:text-[7vw] leading-none font-montrealMedium">
           info@aora.com
         </p>
       </div>
       <div className="lg:col-span-1 flex flex-col-reverse lg:flex-col items-end">
-        <p className="uppercase text-[3em] leading-none font-montrealMedium">
+        <p className="uppercase text-[7vw] lg:text-[3em] leading-none font-montrealMedium">
           aora &copy; 2026
         </p>
         <div className="mt-auto w-full mb-6 lg:mb-0">
