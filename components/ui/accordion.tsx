@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDownIcon } from "lucide-react";
+import { ChevronDownIcon, CirclePlus } from "lucide-react";
 import { Accordion as AccordionPrimitive } from "radix-ui";
 
 import { cn } from "@/lib/utils";
@@ -10,11 +10,7 @@ function Accordion({
   ...props
 }: React.ComponentProps<typeof AccordionPrimitive.Root>) {
   return (
-    <AccordionPrimitive.Root
-      data-slot="accordion"
-      className=""
-      {...props}
-    />
+    <AccordionPrimitive.Root data-slot="accordion" className="" {...props} />
   );
 }
 
@@ -31,11 +27,20 @@ function AccordionItem({
   );
 }
 
+interface AccordionTriggerProps extends React.ComponentProps<
+  typeof AccordionPrimitive.Trigger
+> {
+  showIcon?: boolean;
+  iconSize?: string;
+}
+
 function AccordionTrigger({
   className,
   children,
+  showIcon,
+  iconSize,
   ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {
+}: AccordionTriggerProps) {
   return (
     // [&[data-state=open]>svg]:rotate-180
     <AccordionPrimitive.Header className="flex">
@@ -48,7 +53,16 @@ function AccordionTrigger({
         {...props}
       >
         {children}
-        {/* <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" /> */}
+        {showIcon && (
+          <CirclePlus
+            strokeWidth={1}
+            className={cn(
+              "w-8 h-8 transition-transform group-data-[state=open]:rotate-45 duration-300",
+              iconSize,
+            )}
+          />
+          // <ChevronDownIcon className="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+        )}
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

@@ -1,8 +1,10 @@
+import MainPage from '@/components/pages/detail/MainPage'
 import React from 'react'
 
-function page() {
+async function page({ params }: { params: { product_name: string }}) {
+  const { product_name } = await params
   return (
-    <div>page</div>
+    <MainPage product_name={product_name}/>
   )
 }
 

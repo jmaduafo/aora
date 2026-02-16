@@ -52,16 +52,16 @@ function Services() {
                   />
                 </AccordionTrigger>
                 <AccordionContent className="mt-8">
-                  <span className="flex flex-col gap-2 items-center">
+                  <ul className="flex flex-col gap-2 items-center">
                     {item.services.map((service, i) => {
                       return (
-                        <span key={service} className="inline-flex place-items-center space-x-2">
+                        <li key={service} className="inline-flex place-items-center space-x-2">
                           <span className="inline-flex w-1.5 h-1.5 rounded-xs bg-foreground"></span>
                           <Header6 text={service} />
-                        </span>
+                        </li>
                       );
                     })}
-                  </span>
+                  </ul>
                 </AccordionContent>
               </AccordionItem>
             );

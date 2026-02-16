@@ -32,7 +32,7 @@ async function MainPage() {
   });
 
   return (
-    <section className="pt-[5vh] pb-10 min-h-[55vh]">
+    <section className="pb-10 min-h-[55vh] relative">
       <Shop categories={categories} allProducts={allProducts} />
     </section>
   );

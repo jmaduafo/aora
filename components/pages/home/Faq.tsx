@@ -40,7 +40,7 @@ function Faq() {
                   key={item.question}
                   className=""
                 >
-                  <AccordionTrigger className="group">
+                  <AccordionTrigger className="group" showIcon>
                     <div className="flex-1 flex items-start gap-4">
                       <Paragraph
                         text={`${(i + 1).toString().padStart(2, "0")} /`}
@@ -50,10 +50,6 @@ function Faq() {
                         <Header4 text={item.question} />
                       </FlipText>
                     </div>
-                    <CirclePlus
-                      strokeWidth={1}
-                      className="w-8 h-8 transition-transform group-data-[state=open]:rotate-45 duration-300"
-                    />
                   </AccordionTrigger>
                   <AccordionContent>
                     <div className="flex items-start gap-4">

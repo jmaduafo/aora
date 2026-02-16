@@ -23,11 +23,11 @@ export type Product = {
 };
 
 export type Category = {
-  id: string;
-  name: string;
-  products: Product[];
-  updatedAt: Date | null;
-  createdAt: Date;
+  id?: string;
+  name?: string;
+  products?: Product[];
+  updatedAt?: Date | null;
+  createdAt?: Date;
 };
 
 // export type CategoriesOnProducts = {
