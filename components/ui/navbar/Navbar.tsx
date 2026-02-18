@@ -8,6 +8,17 @@ import Link from "next/link";
 import FlipText from "../animations/FlipText";
 import Paragraph from "../headings/Paragraph";
 import Menu from "./Menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../sheet";
+import Header5 from "../headings/Header5";
+import PurchaseButton from "../buttons/PurchaseButton";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,11 +37,24 @@ function Navbar() {
         </Link>
       </button>
       <div className="flex items-center gap-3">
-        <button>
-          <FlipText>
-            <Paragraph text="Cart (0)" className={`font-montrealMedium`} />
-          </FlipText>
-        </button>
+        <Sheet>
+          <SheetTrigger>
+            <FlipText>
+              <Paragraph text="Cart (0)" className={`font-montrealMedium`} />
+            </FlipText>
+          </SheetTrigger>
+          <SheetContent>
+            <SheetHeader aria-description="">
+              <SheetTitle>Cart</SheetTitle>
+            </SheetHeader>
+            <div>
+              
+            </div>
+            <SheetFooter>
+              <PurchaseButton text="Go to Checkout"/>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
         <div className="hidden sm:block">
           <BookButton text="Book Now" />
         </div>

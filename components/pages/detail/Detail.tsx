@@ -62,15 +62,15 @@ function Detail({ data }: { readonly data: Product }) {
   ];
 
   return (
-    <section>
+    <section className="mt-[6vh]">
       {data ? (
-        <div className="w-[65%] mx-auto flex gap-8 mt-[6vh]">
-          <div className="flex-1 flex gap-6">
-            <div className="flex-1 flex flex-col gap-3">
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex-1 flex flex-col-reverse sm:flex-row gap-6">
+            <div className="grid grid-cols-2 sm:flex-1 sm:flex sm:flex-col gap-3">
               {data.images?.map((img) => {
                 return (
                   <div
-                    className="w-full h-40 flex justify-center items-center p-3 shadow-md"
+                    className="w-full sm:w-full h-40 flex justify-center items-center p-3 shadow-md"
                     key={img}
                   >
                     <div className="h-30 object-cover object-bottom">
@@ -105,6 +105,7 @@ function Detail({ data }: { readonly data: Product }) {
             </div>
           </div>
           <div className="flex-1">
+            {/* BREADCRUMB */}
             <Breadcrumb className="">
               <BreadcrumbList>
                 <BreadcrumbItem>
@@ -122,13 +123,16 @@ function Detail({ data }: { readonly data: Product }) {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
+            {/* TITLE & PRICE */}
             <div className="py-2 border-b border-b-foreground mt-2">
               <Header5 text={data.name} className="font-montrealMedium" />
               <Header5 text={`$${data.prices[selectedIndex]}`} />
             </div>
+            {/* DESCRIPTION */}
             <div className="mt-4">
               <Paragraph text={data.description ?? ""} />
             </div>
+            {/* PRODUCT SIZES */}
             <div className="mt-4">
               <Paragraph text="Sizes" className="font-montrealMedium" />
               <div className="flex items-center gap-6 mt-1">
@@ -149,6 +153,7 @@ function Detail({ data }: { readonly data: Product }) {
                 })}
               </div>
             </div>
+            {/* PRODUCT QUANTITY COUNTER */}
             <div className="mt-5">
               {data.quantity && data.quantity[selectedIndex] !== 0 && (
                 <Counter
@@ -158,14 +163,16 @@ function Detail({ data }: { readonly data: Product }) {
                 />
               )}
             </div>
+            {/* ADD TO CART BUTTON */}
             <div className="mt-4">
               <PurchaseButton text="Add to cart" />
             </div>
+            {/* MORE INFO ACCORDION */}
             <Accordion
               type="single"
               collapsible
               defaultValue={undefined}
-              className="w-full mt-5 border-t-[1.5px]"
+              className="w-full mt-5 border-y-[1.5px]"
             >
               {accordion.map((item) => {
                 return (
