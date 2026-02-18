@@ -22,6 +22,17 @@ export type Product = {
   createdAt?: Date;
 };
 
+export type Cart = {
+  id: string;
+  productId: string;
+  name: string;
+  quantity: number;
+  price: number;
+  size: string;
+  image: string;
+  createdAt: Date;
+};
+
 export type Category = {
   id?: string;
   name?: string;

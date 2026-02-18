@@ -161,4 +161,18 @@ button {
     border-radius: var(--radius-xs);
     background-color: var(--color-foreground);
   }
+
+  .verticalBar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .verticalBar::-webkit-scrollbar-thumb {
+    background-color: var(--color-foreground);
+  }
+
+  .horizontalBar::-webkit-scrollbar {
+    height: 5px;
+  }
+  .horizontalBar::-webkit-scrollbar-thumb {
+    background-color: var(--color-foreground);
+  }
 }
