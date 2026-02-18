@@ -6,7 +6,7 @@ export type SpecialText = {
 export type Product = {
   id: string;
   name: string;
-  quantities?: number[];
+  quantity?: number[];
   prices: number[];
   sizes?: string[];
   images: string[];

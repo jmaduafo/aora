@@ -56,7 +56,7 @@ function Services() {
                     {item.services.map((service, i) => {
                       return (
                         <li key={service} className="inline-flex place-items-center space-x-2">
-                          <span className="inline-flex w-1.5 h-1.5 rounded-xs bg-foreground"></span>
+                          <span className="bullet"></span>
                           <Header6 text={service} />
                         </li>
                       );
