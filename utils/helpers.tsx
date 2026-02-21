@@ -23,11 +23,23 @@ export function cartSum(cart: number[]) {
   return total;
 }
 
+export function formatText(text: string) {
+  if (text.toLowerCase().includes("age")) {
+    if (text.includes("PLUS")) {
+      return text.split("_").slice(-2).join("").replace("PLUS", "+");
+    }
+
+    return text.split("_").slice(-2).join(" - ");
+  }
+
+  return text.split("_").join(" ");
+}
+
 export function getRating(rating: number, size: string) {
   const split = rating.toFixed(2).split(".");
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       {Array.from({ length: +split[0] }).map((_, i) => {
         return (
           <Fragment key={`item-${i + 1}`}>

@@ -15,8 +15,8 @@ datasource db {
 }
 
 model Product {
-  id             String                 @id @unique @default(cuid())
-  name           String                 @unique
+  id             String     @id @unique @default(cuid())
+  name           String     @unique
   prices         Int[]
   quantity       Int[] //  Products in stock
   images         String[]
@@ -25,20 +25,95 @@ model Product {
   keyIngredients String[]
   ingredients    String[]
   sizes          String[]
-  amountSold     Int                    @default(0)
+  amountSold     Int        @default(0)
   warnings       String[]
   howToUse       String[]
   aromas         String[]
-  updatedAt      DateTime               @updatedAt
-  createdAt      DateTime               @default(now())
+  updatedAt      DateTime   @updatedAt
+  createdAt      DateTime   @default(now())
+  reviews        Review[]
 }
 
 model Category {
-  id        String                 @id @unique @default(cuid())
-  name      String                 @unique
+  id        String    @id @unique @default(cuid())
+  name      String    @unique
   products  Product[]
-  updatedAt DateTime               @updatedAt
-  createdAt DateTime               @default(now())
+  updatedAt DateTime  @updatedAt
+  createdAt DateTime  @default(now())
+}
+
+model Review {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  firstName String
+  lastName  String?
+  fullName  String
+
+  email   String
+  rating  Int
+  title   String
+  comment String
+
+  skinType    SkinType?
+  skinConcern SkinConcern[]
+  age         AgeRange
+
+  isVerifiedPurchase Boolean @default(false)
+  helpfulCount       Int     @default(0)
+
+  status ReviewStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum AgeRange {
+  UNDER_18
+  AGE_18_24
+  AGE_25_34
+  AGE_35_44
+  AGE_45_54
+  AGE_55_64
+  AGE_65_PLUS
+}
+
+enum SkinConcern {
+  ACNE
+  HYPERPIGMENTATION
+  DARK_SPOTS
+  DARK_CIRCLES
+  UNEVEN_TONE
+  TEXTURE
+  FINE_LINES
+  DRYNESS
+  OILINESS
+  REDNESS
+  DULLNESS
+}
+
+enum SkinType {
+  OILY
+  DRY
+  COMBINATION
+  NORMAL
+  SENSITIVE
+  ACNE_PRONE
+}
+
+enum SkinTone {
+  VERY_FAIR
+  FAIR
+  MEDIUM
+  OLIVE
+  BROWN
+  DEEP
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
 
 // model CategoriesOnProducts {

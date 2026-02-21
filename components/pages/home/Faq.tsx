@@ -9,7 +9,6 @@ import Header2 from "@/components/ui/headings/Header2";
 import Header4 from "@/components/ui/headings/Header4";
 import Paragraph from "@/components/ui/headings/Paragraph";
 import { frequent_questions } from "@/utils/data";
-import { CirclePlus } from "lucide-react";
 import React from "react";
 
 function Faq() {
