@@ -11,7 +11,7 @@ import Link from "next/link";
 import { createSlug } from "@/utils/helpers";
 
 type Item = {
-  item: Cart;
+  readonly item: Cart;
 };
 
 function CartItem({ item }: Item) {

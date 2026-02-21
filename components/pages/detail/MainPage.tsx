@@ -1,9 +1,10 @@
-import prisma from "@/prisma/client";
+import {prisma } from "@/prisma/client";
 import { deSlug } from "@/utils/helpers";
 import React from "react";
 import Detail from "./Detail";
 import { Product } from "@/types/type";
 import SimilarProducts from "./SimilarProducts";
+import Reviews from "./Reviews";
 
 async function getSimilarProducts(product_name: string) {
   const categories = await prisma.category.findMany({
@@ -32,7 +33,7 @@ async function getSimilarProducts(product_name: string) {
 
   const similarProducts: string[] = [];
 
-  categories.forEach((item) => {
+  categories.forEach((item: { products: any[]; }) => {
     item.products?.forEach((product) => {
       product.name.toLowerCase() !== deSlug(product_name) &&
         similarProducts.push(product.id);
@@ -74,6 +75,8 @@ async function MainPage({ product_name }: { readonly product_name: string }) {
     <div className="w-full lg:w-[80%] xl:w-[65%] 2xl:w-[50%] mx-auto ">
       {/* PRODUCT DETAIL & DESCRIPTIONS WITH PRODUCT IMAGE */}
       <Detail data={detail as Product} />
+      {/* REVIEWS */}
+      <Reviews/>
       {/* SIMILAR PRODUCTS */}
       <SimilarProducts products={products} />
     </div>

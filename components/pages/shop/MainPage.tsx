@@ -1,6 +1,4 @@
-import Header2 from "@/components/ui/headings/Header2";
-import Header6 from "@/components/ui/headings/Header6";
-import prisma from "@/prisma/client";
+import { prisma } from "@/prisma/client";
 import React from "react";
 import Shop from "./Shop";
 

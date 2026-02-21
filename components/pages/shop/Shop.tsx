@@ -9,8 +9,8 @@ import { checkForS } from "@/utils/helpers";
 import React, { Fragment, useEffect, useState } from "react";
 
 type CategoryShop = {
-  categories: Category[];
-  allProducts: Product[];
+  readonly categories: Category[];
+  readonly allProducts: Product[];
 };
 
 function Shop({ categories, allProducts }: CategoryShop) {
@@ -50,7 +50,7 @@ function Shop({ categories, allProducts }: CategoryShop) {
         <div className="flex items-center flex-wrap gap-x-8 gap-y-3 mt-[6vh]">
           <button
             onClick={() => setCategory("all")}
-            className={`hover:opacity-100 duration-300 font-montrealMedium ${category !== "all" ? "opacity-50" : "opacity-100"}`}
+            className={`hover:opacity-100 duration-300 font-montrealMedium ${category === "all" ? "opacity-100" : "opacity-50"}`}
           >
             <Paragraph text="all" />
           </button>
@@ -61,7 +61,7 @@ function Shop({ categories, allProducts }: CategoryShop) {
                   onClick={() =>
                     item?.name && setCategory(item.name.toLowerCase())
                   }
-                  className={`hover:opacity-100 duration-300 font-montrealMedium ${category !== item?.name?.toLowerCase() ? "opacity-50" : "opacity-100"}`}
+                  className={`hover:opacity-100 duration-300 font-montrealMedium ${category === item?.name?.toLowerCase() ? "opacity-100" : "opacity-50"}`}
                 >
                   <Paragraph text={item?.name ?? ""} />
                 </button>

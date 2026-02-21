@@ -1,9 +1,6 @@
 import ShopCard from "@/components/ui/cards/ShopCard";
-import Header2 from "@/components/ui/headings/Header2";
 import Header3 from "@/components/ui/headings/Header3";
-import Header4 from "@/components/ui/headings/Header4";
-import { Category, Product } from "@/types/type";
-import Link from "next/link";
+import { Product } from "@/types/type";
 import React, { Fragment } from "react";
 
 function SimilarProducts({ products }: { readonly products: Product[] }) {

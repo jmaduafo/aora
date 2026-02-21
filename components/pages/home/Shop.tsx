@@ -3,10 +3,10 @@ import ShopCard from "@/components/ui/cards/ShopCard";
 import Header2 from "@/components/ui/headings/Header2";
 import Header6 from "@/components/ui/headings/Header6";
 import Paragraph from "@/components/ui/headings/Paragraph";
-import { createSlug } from "@/utils/helpers";
 import Link from "next/link";
 import React, { Fragment } from "react";
-import prisma from "@/prisma/client";
+import {prisma} from "@/prisma/client";
+import { Product } from "@/types/type";
 
 async function Shop() {
   const transitionLine1 = [
@@ -71,7 +71,7 @@ async function Shop() {
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-2">
-          {data.map((item) => {
+          {data.map((item: Product) => {
             return (
               <Fragment key={item.id}>
                 <ShopCard item={item} />
