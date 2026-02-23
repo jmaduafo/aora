@@ -9,6 +9,7 @@ import {
 } from "@/fonts/fonts";
 import Navbar from "@/components/ui/navbar/Navbar";
 import Footer from "@/components/ui/footer/Footer";
+import LenisProvider from "@/components/ui/lenis/LenisProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,10 +27,14 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${montrealBook.variable} ${montrealMedium.variable} ${montrealThin.variable} ${swily.variable} ${viagram.variable}`}
     >
-      <body className={`font-montrealBook bg-background text-foreground antialiased relative`}>
-        <Navbar />
-        <main className="px-6">{children}</main>
-        <Footer />
+      <body
+        className={`font-montrealBook bg-background text-foreground antialiased relative`}
+      >
+        <LenisProvider>
+          <Navbar />
+          <main className="px-6">{children}</main>
+          <Footer />
+        </LenisProvider>
       </body>
     </html>
   );

@@ -60,17 +60,18 @@ function AdditionalInfo({
         text={title}
         className="text-xs uppercase text-foreground/50 whitespace-nowrap font-montrealMedium"
       />
-
-      {content.map((text, i) => {
-        return (
-          <Fragment key={text}>
-            <Paragraph
-              text={`${formatText(text)}${i === content.length - 1 ? "" : ", "}`}
-              className="text-xs uppercase whitespace-nowrap font-montrealMedium"
-            />
-          </Fragment>
-        );
-      })}
+      <div className="flex gap-1">
+        {content.map((text, i) => {
+          return (
+            <Fragment key={text}>
+              <Paragraph
+                text={`${formatText(text)}${i === content.length - 1 ? "" : ", "}`}
+                className="text-xs uppercase whitespace-nowrap font-montrealMedium"
+              />
+            </Fragment>
+          );
+        })}
+      </div>
     </div>
   );
 }
