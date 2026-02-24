@@ -1,11 +1,27 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import ShopCard from "@/components/ui/cards/ShopCard";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import Header2 from "@/components/ui/headings/Header2";
 import Header6 from "@/components/ui/headings/Header6";
 import Paragraph from "@/components/ui/headings/Paragraph";
 import { Category, Product } from "@/types/type";
 import { checkForS } from "@/utils/helpers";
+import {
+  ArrowDownAZ,
+  ArrowDownNarrowWide,
+  ArrowDownWideNarrow,
+  ArrowDownZA,
+  ArrowUpDown,
+} from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 
 type CategoryShop = {
@@ -31,6 +47,20 @@ function Shop({ categories, allProducts }: CategoryShop) {
     findCategory();
   }, [category]);
 
+  const other = categoryProducts?.products
+    ? categoryProducts?.products.map((item) => {
+        return (
+          <Fragment key={item.id}>
+            <ShopCard item={item} />
+          </Fragment>
+        );
+      })
+    : null;
+
+  const otherS = categoryProducts?.products
+    ? categoryProducts.products.length
+    : 0;
+
   return (
     <>
       <div className="sticky md:relative top-0 z-30 pt-[8vh] bg-background">
@@ -44,30 +74,60 @@ function Shop({ categories, allProducts }: CategoryShop) {
             ]}
           />
           <Header6
-            text={`${category === "all" ? allProducts.length : categoryProducts?.products?.length} result${checkForS(category === "all" ? allProducts.length : categoryProducts?.products ? categoryProducts.products.length : 0)}`}
+            text={`${category === "all" ? allProducts.length : categoryProducts?.products?.length} result${checkForS(category === "all" ? allProducts.length : otherS)}`}
           />
         </div>
-        <div className="flex items-center flex-wrap gap-x-8 gap-y-3 mt-[6vh]">
-          <button
-            onClick={() => setCategory("all")}
-            className={`hover:opacity-100 duration-300 font-montrealMedium ${category === "all" ? "opacity-100" : "opacity-50"}`}
-          >
-            <Paragraph text="all" />
-          </button>
-          {categories.map((item) => {
-            return (
-              <Fragment key={item.id}>
-                <button
-                  onClick={() =>
-                    item?.name && setCategory(item.name.toLowerCase())
-                  }
-                  className={`hover:opacity-100 duration-300 font-montrealMedium ${category === item?.name?.toLowerCase() ? "opacity-100" : "opacity-50"}`}
-                >
-                  <Paragraph text={item?.name ?? ""} />
-                </button>
-              </Fragment>
-            );
-          })}
+        <div className="flex justify-between items-end gap-3">
+          <div className="flex items-center flex-wrap gap-x-8 gap-y-3 mt-[6vh]">
+            <button
+              onClick={() => setCategory("all")}
+              className={`hover:opacity-100 duration-300 font-montrealMedium ${category === "all" ? "opacity-100" : "opacity-50"}`}
+            >
+              <Paragraph text="all" />
+            </button>
+            {categories.map((item) => {
+              return (
+                <Fragment key={item.id}>
+                  <button
+                    onClick={() =>
+                      item?.name && setCategory(item.name.toLowerCase())
+                    }
+                    className={`hover:opacity-100 duration-300 font-montrealMedium ${category === item?.name?.toLowerCase() ? "opacity-100" : "opacity-50"}`}
+                  >
+                    <Paragraph text={item?.name ?? ""} />
+                  </button>
+                </Fragment>
+              );
+            })}
+          </div>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"ghost"}>
+                  <ArrowUpDown strokeWidth={1} />
+                  Sort by
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Sort</DropdownMenuLabel>
+                  <DropdownMenuItem>
+                    <ArrowDownAZ className="text-foreground group-hover:text-background" /> Name
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ArrowDownZA className="text-foreground group-hover:text-background" /> Name
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ArrowDownNarrowWide className="text-foreground group-hover:text-background" /> Price
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ArrowDownWideNarrow className="text-foreground group-hover:text-background" /> Price
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>Recently Added</DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
@@ -79,15 +139,7 @@ function Shop({ categories, allProducts }: CategoryShop) {
                 </Fragment>
               );
             })
-          : categoryProducts?.products
-            ? categoryProducts?.products.map((item) => {
-                return (
-                  <Fragment key={item.id}>
-                    <ShopCard item={item} />
-                  </Fragment>
-                );
-              })
-            : null}
+          : other}
         {!allProducts.length ||
           (categoryProducts?.products &&
             !categoryProducts?.products?.length && <p>No products</p>)}
