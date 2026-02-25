@@ -22,12 +22,15 @@ import Header6 from "@/components/ui/headings/Header6";
 import Paragraph from "@/components/ui/headings/Paragraph";
 import { Product } from "@/types/type";
 import { toBase64, shimmer } from "@/utils/blurDataUrl";
+import { useCartStore } from "@/zustand/store";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 function Detail({ data }: { readonly data: Product }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+
+  const { addItem } = useCartStore();
 
   useEffect(() => {
     data.quantity &&
@@ -117,9 +120,7 @@ function Detail({ data }: { readonly data: Product }) {
                 </BreadcrumbItem>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>
-                    {data.name}
-                  </BreadcrumbPage>
+                  <BreadcrumbPage>{data.name}</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -165,7 +166,23 @@ function Detail({ data }: { readonly data: Product }) {
             </div>
             {/* ADD TO CART BUTTON */}
             <div className="mt-4">
-              <PurchaseButton text="Add to cart" />
+              <PurchaseButton
+                text="Add to cart"
+                action={() =>
+                  data.sizes &&
+                  data.quantity &&
+                  addItem({
+                    id: data.id,
+                    name: data.name,
+                    image: data.images[0],
+                    quantity: selectedQuantity,
+                    productQuantity: data.quantity[selectedIndex],
+                    size: data.sizes[selectedIndex],
+                    price: data.prices[selectedIndex],
+                    createdAt: new Date(Date.now()),
+                  })
+                }
+              />
             </div>
             {/* MORE INFO ACCORDION */}
             <Accordion

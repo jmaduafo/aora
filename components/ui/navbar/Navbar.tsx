@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Image from "next/image";
 import Logo from "@/public/images/logo.png";
 import BookButton from "../buttons/BookButton";
@@ -11,89 +11,27 @@ import Menu from "./Menu";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "../sheet";
-import Header5 from "../headings/Header5";
 import PurchaseButton from "../buttons/PurchaseButton";
-import { Cart } from "@/types/type";
 import CartItem from "../cards/CartItem";
-import { cartSum } from "@/utils/helpers";
+import { useCartStore } from "@/zustand/store";
+import { useRouter } from "next/navigation";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const cartList: Cart[] = [
-    {
-      id: "ddgsdwhg",
-      productId: "dhjshdjhs",
-      name: "Nourishing face cream",
-      quantity: 30,
-      price: 73,
-      size: "120ml",
-      image:
-        "https://aora-images.s3.eu-north-1.amazonaws.com/DROPPER_BOTTLE.png",
-      createdAt: new Date(Date.now()),
-    },
-    {
-      id: "sdjsdjhsdsg",
-      productId: "dhjshdjhs",
-      name: "Koi hydrating serum",
-      quantity: 10,
-      price: 35,
-      size: "60ml",
-      image:
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png",
-      createdAt: new Date(Date.now()),
-    },
-    {
-      id: "sdjschssdjg",
-      productId: "dhjshdjhs",
-      name: "Koi hydrating serum",
-      quantity: 10,
-      price: 35,
-      size: "60ml",
-      image:
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png",
-      createdAt: new Date(Date.now()),
-    },
-    {
-      id: "shsucgsdc",
-      productId: "dhjshdjhs",
-      name: "Koi hydrating serum",
-      quantity: 10,
-      price: 35,
-      size: "60ml",
-      image:
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png",
-      createdAt: new Date(Date.now()),
-    },
-    {
-      id: "oferifos",
-      productId: "dhjshdjhs",
-      name: "Koi hydrating serum",
-      quantity: 10,
-      price: 95,
-      size: "60ml",
-      image:
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png",
-      createdAt: new Date(Date.now()),
-    },
-    {
-      id: "abhcxgvscg",
-      productId: "dhjshdjhs",
-      name: "Koi hydrating serum",
-      quantity: 10,
-      price: 55,
-      size: "60ml",
-      image:
-        "https://aora-images.s3.eu-north-1.amazonaws.com/Frosted_Amber_Bottle_Mockup.png",
-      createdAt: new Date(Date.now()),
-    },
-  ];
+  const { items, clearCart, getTotal } = useCartStore();
+  const route = useRouter();
+
+  useEffect(() => {
+    setIsCartOpen(true);
+  }, [items]);
+
   return (
     <header className="z-50 sticky top-0 flex justify-between items-center py-5 px-6">
       <Menu isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
@@ -108,27 +46,52 @@ function Navbar() {
         </Link>
       </button>
       <div className="flex items-center gap-3">
-        <Sheet>
+        <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
           <SheetTrigger>
             <FlipText>
-            <Paragraph text={`Cart ( ${cartList.length} )`} className={`font-montrealMedium`} />
+              <Paragraph
+                text={`Cart ( ${items.length} )`}
+                className={`font-montrealMedium`}
+              />
             </FlipText>
           </SheetTrigger>
           <SheetContent showCloseButton={false} className="">
             <SheetHeader aria-describedby={undefined}>
-              <SheetTitle>Cart ( {cartList.length} )</SheetTitle>
+              <SheetTitle>Cart ( {items.length} )</SheetTitle>
             </SheetHeader>
-            <div className="px-3 flex flex-col gap-3 overflow-auto verticalBar">
-              {cartList.map((item) => {
+            <div className="px-3 flex flex-col gap-4 h-[90vh] overflow-y-auto verticalBar">
+              {items.map((item) => {
                 return (
                   <Fragment key={item.id}>
-                    <CartItem item={item} />
+                    <CartItem setCartOpen={setIsCartOpen} item={item} />
                   </Fragment>
                 );
               })}
             </div>
             <SheetFooter>
-              <PurchaseButton text={`Checkout: $${cartSum(cartList.map(item => item.price))}`} />
+              <div className="flex justify-end mb-1">
+                {items.length > 0 && (
+                  <FlipText>
+                    <button
+                      className="uppercase text-sm font-montrealMedium hover:opacity-100 opacity-60 duration-300"
+                      onClick={clearCart}
+                    >
+                      Clear
+                    </button>
+                  </FlipText>
+                )}
+              </div>
+              <PurchaseButton
+                text={
+                  items.length > 0
+                    ? `Checkout: $${getTotal()}`
+                    : "Explore our Shop"
+                }
+                action={() => {
+                  items.length <= 0 && route.push("/shop");
+                  setIsCartOpen(false);
+                }}
+              />
             </SheetFooter>
           </SheetContent>
         </Sheet>

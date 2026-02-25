@@ -9,13 +9,17 @@ import { X } from "lucide-react";
 import Header6 from "../headings/Header6";
 import Link from "next/link";
 import { createSlug } from "@/utils/helpers";
+import { useCartStore } from "@/zustand/store";
 
 type Item = {
   readonly item: Cart;
+  readonly setCartOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function CartItem({ item }: Item) {
-  const [quantity, setQuantity] = useState(1);
+function CartItem({ item, setCartOpen }: Item) {
+  const [quantity, setQuantity] = useState(item.quantity);
+
+  const { removeItem } = useCartStore();
 
   return (
     <div className="flex gap-2">
@@ -40,12 +44,18 @@ function CartItem({ item }: Item) {
       <div className="flex-1 flex flex-col">
         <div className="flex justify-between items-start gap-2">
           <div className="flex flex-col gap-1">
-            <Link href={`/shop/${createSlug(item.name)}`}>
-              <Header6 text={item.name} className="font-montrealMedium hover:underline duration-300" />
+            <Link
+              href={`/shop/${createSlug(item.name)}`}
+              onClick={() => setCartOpen(false)}
+            >
+              <Header6
+                text={item.name}
+                className="font-montrealMedium hover:underline duration-300"
+              />
             </Link>
             <Header6 text={`$${item.price * quantity}`} />
           </div>
-          <button>
+          <button onClick={() => removeItem(item.id)}>
             <X className="size-4" />
           </button>
         </div>
@@ -54,8 +64,9 @@ function CartItem({ item }: Item) {
           <Counter
             count={quantity}
             setCount={setQuantity}
-            quantity={item.quantity}
+            quantity={item.productQuantity}
             size="size-3"
+            id={item.id}
           />
         </div>
       </div>

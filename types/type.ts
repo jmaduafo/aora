@@ -24,9 +24,9 @@ export type Product = {
 
 export type Cart = {
   id: string;
-  productId: string;
   name: string;
   quantity: number;
+  productQuantity: number;
   price: number;
   size: string;
   image: string;
