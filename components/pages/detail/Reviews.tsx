@@ -1,17 +1,40 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import PurchaseButton from "@/components/ui/buttons/PurchaseButton";
 import ReviewCard from "@/components/ui/cards/ReviewCard";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet
+} from "@/components/ui/field";
 import Header3 from "@/components/ui/headings/Header3";
 import Header4 from "@/components/ui/headings/Header4";
 import Header6 from "@/components/ui/headings/Header6";
+import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
+import { Slider } from "@/components/ui/slider";
+import { Textarea } from "@/components/ui/textarea";
 import { Review } from "@/types/type";
 import { getRating } from "@/utils/helpers";
 import { ArrowRight, ListFilter } from "lucide-react";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 
 function Reviews() {
+  const [rating, setRating] = useState([2])
+
   const reviews: Review[] = [
     {
       id: "nsjdhwhjdsncjsd",
@@ -29,7 +52,7 @@ function Reviews() {
       skinConcern: ["HYPERPIGMENTATION", "DARK_SPOTS"],
 
       isVerifiedPurchase: true,
-      helpfulCount: 0,
+
       status: "APPROVED",
       createdAt: new Date("12-11-2025"),
     },
@@ -57,10 +80,103 @@ function Reviews() {
           </div>
         </div>
         <div className="flex-1">
-          <button className="flex items-center gap-2 group">
-            <Header4 text="Write a Review" className="font-montrealMedium" />
-            <ArrowRight className="size-7 group-hover:translate-x-3 duration-300" />
-          </button>
+          <Dialog>
+            <DialogTrigger className="flex items-center gap-2 group">
+              <Header4 text="Write a Review" className="font-montrealMedium" />
+              <ArrowRight className="size-7 group-hover:translate-x-3 duration-300" />
+            </DialogTrigger>
+            <DialogContent aria-describedby={undefined}>
+              <DialogHeader>
+                <DialogTitle>Review form</DialogTitle>
+              </DialogHeader>
+              <form>
+                <FieldGroup>
+                  <FieldSet>
+                    <FieldGroup>
+                      <div className="grid grid-cols-2 gap-3">
+                        <Field>
+                          <FieldLabel htmlFor="first_name">
+                            First name
+                          </FieldLabel>
+                          <Input
+                            id="first_name"
+                            name="first_name"
+                            autoComplete="off"
+                            placeholder="John"
+                          />
+                        </Field>
+                        <Field>
+                          <FieldLabel htmlFor="last_name">Last name</FieldLabel>
+                          <Input
+                            id="last_name"
+                            name="last_name"
+                            autoComplete="off"
+                            placeholder="Doe"
+                          />
+                        </Field>
+                      </div>
+                      <Field>
+                        <FieldLabel htmlFor="email">Email</FieldLabel>
+                        <Input
+                          id="email"
+                          name="email"
+                          autoComplete="off"
+                          placeholder="user@example.com"
+                        />
+                      </Field>
+                    </FieldGroup>
+                  </FieldSet>
+                  <FieldSeparator />
+                  <FieldSet>
+                    <FieldGroup>
+                      <Field>
+                        <div className="flex items-center justify-between">
+                        <FieldLabel htmlFor="rating">Rating</FieldLabel>
+                          <span className="text-sm">{rating}</span>
+                        </div>
+                        <Slider
+                          id="rating"
+                          name="rating"
+                          defaultValue={[1]}
+                          max={5}
+                          min={1}
+                          step={1}
+                          value={rating}
+                          onValueChange={setRating}
+                          className="w-full"
+                        />
+                        <FieldDescription>
+                          Please rate the product from 1 to 5
+                        </FieldDescription>
+                      </Field>
+                      <Field>
+                        <FieldLabel htmlFor="title">Title</FieldLabel>
+                        <Input id="title" name="title"/>
+                        <FieldDescription>
+                          Please give the review a title
+                        </FieldDescription>
+                      </Field>
+                      <Field>
+                        <FieldLabel htmlFor="comment">Review</FieldLabel>
+                        <Textarea id="comment" name="comment" placeholder="How do you feel about the product?"/>
+                      </Field>
+                    </FieldGroup>
+                  </FieldSet>
+                  <FieldSeparator />
+                  <FieldSet>
+                    <FieldGroup>
+                    <FieldLegend>
+                      Additional Information
+                    </FieldLegend>
+                      <Field>
+                      </Field>
+                      
+                    </FieldGroup>
+                  </FieldSet>
+                </FieldGroup>
+              </form>
+            </DialogContent>
+          </Dialog>
           <div className="py-2 flex justify-end border-y-[1.5px] mt-5">
             <Button variant={"ghost"}>
               <ListFilter />
@@ -79,7 +195,11 @@ function Reviews() {
               );
             })}
           </div>
-          {reviews.length === 1 && <div className="mt-3"><PurchaseButton text="Show More"/></div>}
+          {reviews.length === 1 && (
+            <div className="mt-3">
+              <PurchaseButton text="Show More" />
+            </div>
+          )}
         </div>
       </div>
     </section>

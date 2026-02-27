@@ -18,6 +18,7 @@ export type Product = {
   warnings?: string[];
   howToUse?: string[];
   aromas?: string[];
+  reviews?: Review[];
   updatedAt?: Date | null;
   createdAt?: Date;
 };
@@ -43,6 +44,7 @@ export type Category = {
 
 export type Review = {
   id: string;
+  userId?: string;
   productId: string;
   product?: Product;
   firstName: string;
@@ -58,7 +60,7 @@ export type Review = {
   skinConcern: SkinConcern[];
 
   isVerifiedPurchase: boolean;
-  helpfulCount: number;
+  helpfuls?: Helpful[];
   status: "PENDING" | "APPROVED" | "DENIED";
   createdAt: Date;
   updatedAt?: Date;
@@ -92,7 +94,15 @@ type Ages =
   | "AGE_35_44"
   | "AGE_45_54"
   | "AGE_55_64"
-  | "AGE_65_PLUS"
+  | "AGE_65_PLUS";
+
+export type Helpful = {
+  id: string;
+  userId: string;
+  review: Review;
+  reviewId: string;
+  createdAt: Date;
+};
 
 export type Package = {
   title: string;

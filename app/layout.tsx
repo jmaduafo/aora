@@ -10,6 +10,7 @@ import {
 import Navbar from "@/components/ui/navbar/Navbar";
 import Footer from "@/components/ui/footer/Footer";
 import { SmoothScroll } from "@/components/ui/lenis/SmoothScroll";
+import SetID from "@/components/ui/user-identification/SetID";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body
         className={`font-montrealBook bg-background text-foreground antialiased relative verticalBar`}
       >
+        <SetID/>
         <SmoothScroll />
         <Navbar />
         <main className="px-6">{children}</main>

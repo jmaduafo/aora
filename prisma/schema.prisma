@@ -21,6 +21,7 @@ model Product {
   quantity       Int[] //  Products in stock
   images         String[]
   categories     Category[]
+  reviews        Review[]
   description    String
   keyIngredients String[]
   ingredients    String[]
@@ -31,7 +32,6 @@ model Product {
   aromas         String[]
   updatedAt      DateTime   @updatedAt
   createdAt      DateTime   @default(now())
-  reviews        Review[]
 }
 
 model Category {
@@ -44,6 +44,7 @@ model Category {
 
 model Review {
   id        String  @id @default(cuid())
+  userId    String
   productId String
   product   Product @relation(fields: [productId], references: [id])
   firstName String
@@ -59,8 +60,8 @@ model Review {
   skinConcern SkinConcern[]
   age         AgeRange
 
-  isVerifiedPurchase Boolean @default(false)
-  helpfulCount       Int     @default(0)
+  isVerifiedPurchase Boolean   @default(false)
+  helpfuls           Helpful[]
 
   status ReviewStatus @default(PENDING)
 
@@ -114,6 +115,14 @@ enum ReviewStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+model Helpful {
+  id        String   @id @default(cuid())
+  userId    String
+  reviewId  String
+  review    Review   @relation(fields: [reviewId], references: [id])
+  createdAt DateTime @default(now())
 }
 
 // model CategoriesOnProducts {
