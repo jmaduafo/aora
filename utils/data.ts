@@ -153,77 +153,124 @@ packages.forEach((item, i) => {
 });
 
 export const frequent_questions = [
-    {
-        question: "Do I need to make a reservation in advance?",
-        answer: "Yes. We recommend reserving in advance to ensure availability and to allow us to prepare your experience with intention."
-    },
-    {
-        question: "What should I arrive with for my appointment?",
-        answer: "Simply arrive a few minutes early and bring yourself. Everything you need for your treatment is provided by AORA."
-    },
-    {
-        question: "Can I customize my treatment or package?",
-        answer: "Yes. Our therapists are happy to tailor your experience to your preferences and comfort during your visit."
-    },
-    {
-        question: "What is your cancellation policy?",
-        answer: "We kindly ask for at least 24 hours’ notice for cancellations or rescheduling to accommodate other guests."
-    },
-    {
-        question: "Are your products suitable for sensitive skin?",
-        answer: "Our products are formulated with gentle, thoughtfully selected ingredients. If you have sensitivities, please let us know in advance."
-    },
-    {
-        question: "Can I purchase products after my treatment?",
-        answer: "Yes. Our skincare and wellness products are available to purchase and are designed to extend your AORA experience at home."
-    },
-    {
-        question: "Is AORA suitable for first-time spa guests?",
-        answer: "Absolutely. Our space is designed to feel welcoming and restorative, whether it’s your first visit or part of a regular ritual."
-    },
-]
+  {
+    question: "Do I need to make a reservation in advance?",
+    answer:
+      "Yes. We recommend reserving in advance to ensure availability and to allow us to prepare your experience with intention.",
+  },
+  {
+    question: "What should I arrive with for my appointment?",
+    answer:
+      "Simply arrive a few minutes early and bring yourself. Everything you need for your treatment is provided by AORA.",
+  },
+  {
+    question: "Can I customize my treatment or package?",
+    answer:
+      "Yes. Our therapists are happy to tailor your experience to your preferences and comfort during your visit.",
+  },
+  {
+    question: "What is your cancellation policy?",
+    answer:
+      "We kindly ask for at least 24 hours’ notice for cancellations or rescheduling to accommodate other guests.",
+  },
+  {
+    question: "Are your products suitable for sensitive skin?",
+    answer:
+      "Our products are formulated with gentle, thoughtfully selected ingredients. If you have sensitivities, please let us know in advance.",
+  },
+  {
+    question: "Can I purchase products after my treatment?",
+    answer:
+      "Yes. Our skincare and wellness products are available to purchase and are designed to extend your AORA experience at home.",
+  },
+  {
+    question: "Is AORA suitable for first-time spa guests?",
+    answer:
+      "Absolutely. Our space is designed to feel welcoming and restorative, whether it’s your first visit or part of a regular ritual.",
+  },
+];
 
 export const socials = [
-    {
-        title: "instagram",
-        href: "",
-    },
-    {
-        title: "tiktok",
-        href: ""
-    },
-    {
-        title: "linkedin",
-        href: ""
-    },
-    {
-        title: "facebook",
-        href: ""
-    },
-]
+  {
+    title: "instagram",
+    href: "",
+  },
+  {
+    title: "tiktok",
+    href: "",
+  },
+  {
+    title: "linkedin",
+    href: "",
+  },
+  {
+    title: "facebook",
+    href: "",
+  },
+];
 
 export const legal = [
-    {
-        title: "terms & conditions",
-    },
-    {
-        title: "privacy policy",
-    },
-    {
-        title: "cookies policy",
-    },
-    
-]
+  {
+    title: "terms & conditions",
+  },
+  {
+    title: "privacy policy",
+  },
+  {
+    title: "cookies policy",
+  },
+];
 
 export const contact = [
-    {
-        title: "123 Hydrate Drive",
-    },
-    {
-        title: "Chicago, Illinois",
-    },
-    {
-        title: "(123) 456 7890",
-    },
-    
-]
+  {
+    title: "123 Hydrate Drive",
+  },
+  {
+    title: "Chicago, Illinois",
+  },
+  {
+    title: "(123) 456 7890",
+  },
+];
+
+export const ages = [
+  "UNDER_18",
+  "AGE_18_24",
+  "AGE_25_34",
+  "AGE_35_44",
+  "AGE_45_54",
+  "AGE_55_64",
+  "AGE_65_PLUS",
+];
+
+export const skin_concerns = [
+  "ACNE",
+  "HYPERPIGMENTATION",
+  "DARK_SPOTS",
+  "DARK_CIRCLES",
+  "UNEVEN_TONE",
+  "TEXTURE",
+  "FINE_LINES",
+  "DRYNESS",
+  "OILINESS",
+  "REDNESS",
+  "DULLNESS",
+];
+
+export const skin_type = [
+  "OILY",
+  "DRY",
+  "COMBINATION",
+  "NORMAL",
+  "SENSITIVE",
+  "ACNE_PRONE",
+];
+
+export const skin_tone = [
+  "VERY_FAIR",
+  "FAIR",
+  "MEDIUM",
+  "OLIVE",
+  "BROWN",
+  "DEEP",
+];

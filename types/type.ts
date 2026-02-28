@@ -58,6 +58,7 @@ export type Review = {
   age: Ages;
   skinType: SkinType;
   skinConcern: SkinConcern[];
+  skinTone: SkinTone;
 
   isVerifiedPurchase: boolean;
   helpfuls?: Helpful[];
@@ -86,6 +87,8 @@ type SkinConcern =
   | "OILINESS"
   | "REDNESS"
   | "DULLNESS";
+
+type SkinTone = "VERY_FAIR" | "FAIR" | "MEDIUM" | "OLIVE" | "BROWN" | "DEEP";
 
 type Ages =
   | "UNDER_18"

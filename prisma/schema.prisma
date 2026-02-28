@@ -57,6 +57,7 @@ model Review {
   comment String
 
   skinType    SkinType?
+  skinTone    SkinTone?
   skinConcern SkinConcern[]
   age         AgeRange
 
