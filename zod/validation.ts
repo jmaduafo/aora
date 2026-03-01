@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const ReviewSchema = z.object({
+export const ReviewSchema = z.object({
   firstName: z
     .string()
     .min(1, "First name is required")
@@ -14,9 +14,7 @@ const ReviewSchema = z.object({
     .min(1, "Title is required")
     .max(50, "The title must be at most 50 characters"),
   email: z
-    .email()
-    .min(20, "Description must be at least 20 characters.")
-    .max(100, "Description must be at most 100 characters."),
+    .email({ message: "Invalid email address"}),
   rating: z
     .number()
     .min(1, "Rating should be at least 1")
@@ -25,5 +23,5 @@ const ReviewSchema = z.object({
   age: z.string().min(1, "This field should not be left empty"),
   skinTone: z.string().min(1, "This field should not be left empty"),
   skinType: z.string().min(1, "This field should not be left empty"),
-  skinConcern: z.string().min(1, "This field should not be left empty"),
+  skinConcern: z.nullable(z.array(z.string()))
 });

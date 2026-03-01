@@ -13,6 +13,7 @@ import {
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
@@ -33,6 +34,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxValue,
+} from "@/components/ui/combobox";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Review } from "@/types/type";
@@ -41,10 +53,15 @@ import { formatText, getRating } from "@/utils/helpers";
 import { ArrowRight, ListFilter } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import { FaStar } from "react-icons/fa6";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { ReviewSchema } from "@/zod/validation";
+import * as z from "zod";
 
 function Reviews() {
   const [rating, setRating] = useState([5]);
   const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [skinConcerns, setSkinConcerns] = React.useState<string[]>([]);
 
   const reviews: Review[] = [
     {
@@ -69,6 +86,31 @@ function Reviews() {
       createdAt: new Date("12-11-2025"),
     },
   ];
+
+  const form = useForm<z.infer<typeof ReviewSchema>>({
+    resolver: zodResolver(ReviewSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      title: "",
+      email: "",
+      rating: 5,
+      comment: "",
+      age: "",
+      skinTone: "",
+      skinType: "",
+      skinConcern: [],
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof ReviewSchema>) {
+    try {
+      console.log("yes")
+    } catch (err: any) {
+      console.log(err.message);
+    }
+  }
+
   return (
     <section className="mt-[15vh]">
       <div className="flex flex-col lg:flex-row gap-[5vw]">
@@ -101,31 +143,54 @@ function Reviews() {
               <DialogHeader>
                 <DialogTitle>Review form</DialogTitle>
               </DialogHeader>
-              <form>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FieldGroup>
                   <FieldSet>
                     <FieldGroup>
                       <div className="grid grid-cols-2 gap-3">
-                        <Field>
-                          <FieldLabel htmlFor="first_name">
-                            First name
-                          </FieldLabel>
-                          <Input
-                            id="first_name"
-                            name="first_name"
-                            autoComplete="off"
-                            placeholder="John"
-                          />
-                        </Field>
-                        <Field>
-                          <FieldLabel htmlFor="last_name">Last name</FieldLabel>
-                          <Input
-                            id="last_name"
-                            name="last_name"
-                            autoComplete="off"
-                            placeholder="Doe"
-                          />
-                        </Field>
+                        <Controller
+                          name="firstName"
+                          control={form.control}
+                          render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                              <FieldLabel htmlFor="first_name">
+                                First name
+                              </FieldLabel>
+                              <Input
+                                {...field}
+                                aria-invalid={fieldState.invalid}
+                                id="first_name"
+                                autoComplete="off"
+                                placeholder="John"
+                              />
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
+                          )}
+                        />
+                        <Controller
+                          name="lastName"
+                          control={form.control}
+                          render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                              <FieldLabel htmlFor="last_name">
+                                Last name
+                              </FieldLabel>
+                              <Input
+                                {...field}
+                                aria-invalid={fieldState.invalid}
+                                id="last_name"
+                                name="last_name"
+                                autoComplete="off"
+                                placeholder="Doe"
+                              />
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
+                          )}
+                        />
                       </div>
                       <Field>
                         <FieldLabel htmlFor="email">Email</FieldLabel>
@@ -214,28 +279,46 @@ function Reviews() {
                         </Field>
                         <Field>
                           <FieldLabel htmlFor="skin_concern">
-                            Skin Concern
+                            Skin Concerns
                           </FieldLabel>
-                          <Select>
-                            <SelectTrigger className="w-full">
-                              <SelectValue
-                                id="skin_concern"
-                                placeholder="Select your skin concern"
+                          <Combobox
+                            modal={false}
+                            items={skin_concerns}
+                            multiple
+                            value={skinConcerns}
+                            onValueChange={setSkinConcerns}
+                          >
+                            <ComboboxChips>
+                              <ComboboxValue>
+                                {skinConcerns.map((item) => (
+                                  <ComboboxChip key={item}>
+                                    {formatText(item)}
+                                  </ComboboxChip>
+                                ))}
+                              </ComboboxValue>
+                              <ComboboxChipsInput
+                                placeholder={
+                                  skinConcerns.length >= 3
+                                    ? undefined
+                                    : "Add concern"
+                                }
                               />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>Skin Concerns</SelectLabel>
-                                {skin_concerns.map((item) => {
-                                  return (
-                                    <SelectItem key={item} value={item}>
-                                      {formatText(item)}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
+                            </ComboboxChips>
+                            <ComboboxContent>
+                              <ComboboxEmpty>No items found.</ComboboxEmpty>
+                              <ComboboxList>
+                                {(item) => (
+                                  <ComboboxItem
+                                    disabled={skinConcerns.length >= 3}
+                                    key={item}
+                                    value={item}
+                                  >
+                                    {formatText(item)}
+                                  </ComboboxItem>
+                                )}
+                              </ComboboxList>
+                            </ComboboxContent>
+                          </Combobox>
                         </Field>
                       </div>
                     </FieldGroup>
