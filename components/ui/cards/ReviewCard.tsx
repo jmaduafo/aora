@@ -39,7 +39,7 @@ function ReviewCard({ item }: Card) {
         <Paragraph text={item.comment} />
       </div>
       <div className="flex justify-end mt-2">
-        <LikeButton likes={item.helpfulCount} desc="Helpful?" />
+        <LikeButton likes={item.helpfuls ? item.helpfuls.length : 0} desc="Helpful?" />
       </div>
     </div>
   );

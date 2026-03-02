@@ -51,3 +51,53 @@ export function getRating(rating: number, size: string) {
     </div>
   );
 }
+
+export function getFullName(first_name: string, last_name: string) {
+  return (
+    first_name.charAt(0).toUpperCase() +
+    first_name.slice(1).toLowerCase() +
+    " " +
+    last_name.charAt(0).toUpperCase() +
+    last_name.slice(1).toLowerCase()
+  );
+}
+
+export function averageRating(ratings: number[]) {
+  let total = 0
+
+  ratings.forEach(rating => {
+    total += rating
+  })
+
+  return total / ratings.length
+}
+
+export function ratingRanking(ratings: number[]) {
+  const rank: any[] = []
+
+  // ORGANIZE FOR THE RATINGS TO BE AN ARRAY OF { RATING: NUMBER, COUNT: NUMBER}
+  Array.from({ length: 5 }).forEach((_, i) => {
+    rank.push({ rating: 5 - i, count: 0})
+  })
+
+  // LOOP THROUGH RATINGS ARRAY AND COUNT BASED ON HOW MANY TIMES
+  // THE RATING APPEARS
+  ratings.forEach(rating => {
+    const rankIndex = rank.findIndex(item => item.rating === rating)
+
+    if (rankIndex === -1) {
+      rank.push({ rating, count: 1 })
+    }
+
+    rank[rankIndex].count++
+  })
+
+  const rankPercent: any[] = []
+
+  // CALCULATE THE PERCENT OF EACH RATING
+  rank.forEach(item => {
+    rankPercent.push({...item, percent: Math.floor(item.count / ratings.length) * 100})
+  })
+
+  return rankPercent
+}

@@ -32,6 +32,7 @@ model Product {
   aromas         String[]
   updatedAt      DateTime   @updatedAt
   createdAt      DateTime   @default(now())
+  favorites      Favorite[]
 }
 
 model Category {
@@ -43,7 +44,7 @@ model Category {
 }
 
 model Review {
-  id        String  @id @default(cuid())
+  id        String  @id @unique @default(cuid())
   userId    String
   productId String
   product   Product @relation(fields: [productId], references: [id])
@@ -56,67 +57,68 @@ model Review {
   title   String
   comment String
 
-  skinType    SkinType?
-  skinTone    SkinTone?
-  skinConcern SkinConcern[]
-  age         AgeRange
+  skinType    String?
+  skinTone    String
+  skinConcern String[]
+  age         String
 
   isVerifiedPurchase Boolean   @default(false)
   helpfuls           Helpful[]
 
-  status ReviewStatus @default(PENDING)
+  status String @default("PENDING")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@unique([userId, productId])
 }
 
-enum AgeRange {
-  UNDER_18
-  AGE_18_24
-  AGE_25_34
-  AGE_35_44
-  AGE_45_54
-  AGE_55_64
-  AGE_65_PLUS
-}
+// enum AgeRange {
+//   AGE_18_24
+//   AGE_25_34
+//   AGE_35_44
+//   AGE_45_54
+//   AGE_55_64
+//   AGE_65_PLUS
+// }
 
-enum SkinConcern {
-  ACNE
-  HYPERPIGMENTATION
-  DARK_SPOTS
-  DARK_CIRCLES
-  UNEVEN_TONE
-  TEXTURE
-  FINE_LINES
-  DRYNESS
-  OILINESS
-  REDNESS
-  DULLNESS
-}
+// enum SkinConcern {
+//   ACNE
+//   HYPERPIGMENTATION
+//   DARK_SPOTS
+//   DARK_CIRCLES
+//   UNEVEN_TONE
+//   TEXTURE
+//   FINE_LINES
+//   DRYNESS
+//   OILINESS
+//   REDNESS
+//   DULLNESS
+// }
 
-enum SkinType {
-  OILY
-  DRY
-  COMBINATION
-  NORMAL
-  SENSITIVE
-  ACNE_PRONE
-}
+// enum SkinType {
+//   OILY
+//   DRY
+//   COMBINATION
+//   NORMAL
+//   SENSITIVE
+//   ACNE_PRONE
+// }
 
-enum SkinTone {
-  VERY_FAIR
-  FAIR
-  MEDIUM
-  OLIVE
-  BROWN
-  DEEP
-}
+// enum SkinTone {
+//   VERY_FAIR
+//   FAIR
+//   MEDIUM
+//   OLIVE
+//   BROWN
+//   DEEP
+// }
 
-enum ReviewStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
+// enum ReviewStatus {
+//   PENDING
+//   APPROVED
+//   REJECTED
+// }
 
 model Helpful {
   id        String   @id @default(cuid())
@@ -124,6 +126,18 @@ model Helpful {
   reviewId  String
   review    Review   @relation(fields: [reviewId], references: [id])
   createdAt DateTime @default(now())
+
+  @@unique([userId, reviewId])
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
 }
 
 // model CategoriesOnProducts {

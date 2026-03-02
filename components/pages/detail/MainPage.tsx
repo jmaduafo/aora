@@ -1,4 +1,4 @@
-import {prisma } from "@/prisma/client";
+import { prisma } from "@/prisma/client";
 import { deSlug } from "@/utils/helpers";
 import React from "react";
 import Detail from "./Detail";
@@ -23,7 +23,7 @@ async function getSimilarProducts(product_name: string) {
           name: {
             equals: deSlug(product_name),
             mode: "insensitive",
-          }
+          },
         },
       },
     },
@@ -33,7 +33,7 @@ async function getSimilarProducts(product_name: string) {
 
   const similarProducts: string[] = [];
 
-  categories.forEach((item: { products: any[]; }) => {
+  categories.forEach((item: { products: any[] }) => {
     item.products?.forEach((product) => {
       product.name.toLowerCase() !== deSlug(product_name) &&
         similarProducts.push(product.id);
@@ -67,6 +67,21 @@ async function MainPage({ product_name }: { readonly product_name: string }) {
         mode: "insensitive",
       },
     },
+    include: {
+      reviews: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          helpfuls: true,
+        },
+      },
+      favorites: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
 
   const products = await getSimilarProducts(product_name);
@@ -74,9 +89,9 @@ async function MainPage({ product_name }: { readonly product_name: string }) {
   return (
     <div className="w-full lg:w-[80%] xl:w-[65%] 2xl:w-[50%] mx-auto ">
       {/* PRODUCT DETAIL & DESCRIPTIONS WITH PRODUCT IMAGE */}
-      <Detail data={detail as Product} />
+      <Detail data={detail as unknown as Product} />
       {/* REVIEWS */}
-      <Reviews/>
+      <Reviews product={detail as unknown as Product} />
       {/* SIMILAR PRODUCTS */}
       <SimilarProducts products={products} />
     </div>

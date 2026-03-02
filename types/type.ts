@@ -91,7 +91,6 @@ type SkinConcern =
 type SkinTone = "VERY_FAIR" | "FAIR" | "MEDIUM" | "OLIVE" | "BROWN" | "DEEP";
 
 type Ages =
-  | "UNDER_18"
   | "AGE_18_24"
   | "AGE_25_34"
   | "AGE_35_44"
@@ -104,6 +103,14 @@ export type Helpful = {
   userId: string;
   review: Review;
   reviewId: string;
+  createdAt: Date;
+};
+
+export type Favorite = {
+  id: string;
+  userId: string;
+  product: Product;
+  productId: string;
   createdAt: Date;
 };
 

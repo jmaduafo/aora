@@ -16,12 +16,12 @@ export const ReviewSchema = z.object({
   email: z
     .email({ message: "Invalid email address"}),
   rating: z
-    .number()
+    .array(z.number())
     .min(1, "Rating should be at least 1")
     .max(5, "Rating cannot be more than 5"),
   comment: z.string().min(1, "Comment should not be empty"),
   age: z.string().min(1, "This field should not be left empty"),
   skinTone: z.string().min(1, "This field should not be left empty"),
-  skinType: z.string().min(1, "This field should not be left empty"),
-  skinConcern: z.nullable(z.array(z.string()))
+  skinType: z.nullable(z.string()),
+  skinConcern: z.array(z.string()).min(0)
 });

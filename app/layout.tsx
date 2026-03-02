@@ -11,6 +11,7 @@ import Navbar from "@/components/ui/navbar/Navbar";
 import Footer from "@/components/ui/footer/Footer";
 import { SmoothScroll } from "@/components/ui/lenis/SmoothScroll";
 import SetID from "@/components/ui/user-identification/SetID";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -31,11 +32,20 @@ export default function RootLayout({
       <body
         className={`font-montrealBook bg-background text-foreground antialiased relative verticalBar`}
       >
-        <SetID/>
+        <SetID />
         <SmoothScroll />
         <Navbar />
         <main className="px-6">{children}</main>
         <Footer />
+        <Toaster
+          toastOptions={{
+            classNames: {
+              toast: "font-montrealBook bg-background text-foreground",
+              title: "text-sm! font-montrealMedium!",
+              description: "text-sm! text-foreground/70!",
+            },
+          }}
+        />
       </body>
     </html>
   );

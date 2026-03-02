@@ -234,7 +234,6 @@ export const contact = [
 ];
 
 export const ages = [
-  "UNDER_18",
   "AGE_18_24",
   "AGE_25_34",
   "AGE_35_44",

@@ -47,9 +47,15 @@ import {
 } from "@/components/ui/combobox";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
-import { Review } from "@/types/type";
+import { Product } from "@/types/type";
 import { ages, skin_concerns, skin_tone, skin_type } from "@/utils/data";
-import { formatText, getRating } from "@/utils/helpers";
+import {
+  averageRating,
+  formatText,
+  getFullName,
+  getRating,
+  ratingRanking,
+} from "@/utils/helpers";
 import { ArrowRight, ListFilter } from "lucide-react";
 import React, { Fragment, useState } from "react";
 import { FaStar } from "react-icons/fa6";
@@ -57,35 +63,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { ReviewSchema } from "@/zod/validation";
 import * as z from "zod";
+import { createReview } from "@/prisma/actions";
+import { toast } from "sonner";
 
-function Reviews() {
-  const [rating, setRating] = useState([5]);
+function Reviews({ product }: { readonly product: Product | undefined }) {
   const [isReviewOpen, setIsReviewOpen] = useState(false);
-  const [skinConcerns, setSkinConcerns] = React.useState<string[]>([]);
-
-  const reviews: Review[] = [
-    {
-      id: "nsjdhwhjdsncjsd",
-      productId: "dsjsjjhcjsd",
-      firstName: "Trent",
-      lastName: "Powers",
-      fullName: "Trent Powers",
-      email: "trent@gmail.com",
-      rating: 3,
-      title: "Great product!",
-      comment: "xo tatted all over her body ooh oh",
-
-      age: "AGE_65_PLUS",
-      skinType: "COMBINATION",
-      skinConcern: ["HYPERPIGMENTATION", "DARK_SPOTS"],
-      skinTone: "MEDIUM",
-
-      isVerifiedPurchase: true,
-
-      status: "APPROVED",
-      createdAt: new Date("12-11-2025"),
-    },
-  ];
 
   const form = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
@@ -94,7 +76,7 @@ function Reviews() {
       lastName: "",
       title: "",
       email: "",
-      rating: 5,
+      rating: [5],
       comment: "",
       age: "",
       skinTone: "",
@@ -103,11 +85,41 @@ function Reviews() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof ReviewSchema>) {
+  async function onSubmit(data: z.infer<typeof ReviewSchema>) {
     try {
-      console.log("yes")
+      const user_id = localStorage.getItem("aora_id");
+
+      if (!user_id || !product) {
+        toast.error("Something went wrong", {
+          description:
+            "We could not identify your user ID. Please refresh the page and try again.",
+        });
+        return;
+      }
+
+      await createReview({
+        firstName: data.firstName.trim(),
+        lastName: data.lastName.trim(),
+        fullName: getFullName(data.firstName.trim(), data.lastName.trim()),
+        email: data.email.trim(),
+        title: data.title.trim(),
+        rating: data.rating[0],
+        comment: data.comment.trim(),
+        age: data.age,
+        skinTone: data.skinTone,
+        skinType: data.skinType,
+        skinConcern: data.skinConcern,
+        userId: user_id,
+        product: {
+          connect: { id: product.id },
+        },
+      });
+
+      toast.success("Success!", {
+        description: "Your review was submitted successfully!",
+      });
     } catch (err: any) {
-      console.log(err.message);
+      toast.error("Something went wrong", { description: err.message });
     }
   }
 
@@ -115,22 +127,37 @@ function Reviews() {
     <section className="mt-[15vh]">
       <div className="flex flex-col lg:flex-row gap-[5vw]">
         <div>
-          <Header3 className="font-montrealMedium" text={`Reviews ( 0 )`} />
+          <Header3
+            className="font-montrealMedium"
+            text={`Reviews ( ${product?.reviews?.length} )`}
+          />
           <div className="flex items-center gap-4 mt-[6vh]">
             <Header4
-              text={`${(4.5).toFixed(2)}`}
+              text={`${product?.reviews ? averageRating(product?.reviews?.map((item) => item.rating)).toFixed(2) : 0}`}
               className="font-montrealMedium"
             />
-            {getRating(4.5, "size-5")}
+            {getRating(
+              product?.reviews
+                ? averageRating(product?.reviews?.map((item) => item.rating))
+                : 0,
+              "size-5",
+            )}
           </div>
           <div className="grid gap-2 mt-5">
-            {Array.from({ length: 5 }).map((_, i) => {
-              return (
-                <Fragment key={`item-${i + 1}`}>
-                  <RatingBar rating={5 - i} percentage={45} />
-                </Fragment>
-              );
-            })}
+            {product?.reviews
+              ? ratingRanking(product?.reviews?.map((item) => item.rating)).map(
+                  (item) => {
+                    return (
+                      <Fragment key={item.rating}>
+                        <RatingBar
+                          rating={item.rating}
+                          percentage={item.percent}
+                        />
+                      </Fragment>
+                    );
+                  },
+                )
+              : null}
           </div>
         </div>
         <div className="flex-1">
@@ -154,12 +181,12 @@ function Reviews() {
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel htmlFor="first_name">
-                                First name
+                                First name *
                               </FieldLabel>
                               <Input
                                 {...field}
                                 aria-invalid={fieldState.invalid}
-                                id="first_name"
+                                id={field.name}
                                 autoComplete="off"
                                 placeholder="John"
                               />
@@ -174,14 +201,13 @@ function Reviews() {
                           control={form.control}
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
-                              <FieldLabel htmlFor="last_name">
-                                Last name
+                              <FieldLabel htmlFor={field.name}>
+                                Last name *
                               </FieldLabel>
                               <Input
                                 {...field}
                                 aria-invalid={fieldState.invalid}
-                                id="last_name"
-                                name="last_name"
+                                id={field.name}
                                 autoComplete="off"
                                 placeholder="Doe"
                               />
@@ -192,15 +218,27 @@ function Reviews() {
                           )}
                         />
                       </div>
-                      <Field>
-                        <FieldLabel htmlFor="email">Email</FieldLabel>
-                        <Input
-                          id="email"
-                          name="email"
-                          autoComplete="off"
-                          placeholder="user@example.com"
-                        />
-                      </Field>
+                      <Controller
+                        name="email"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                              Email *
+                            </FieldLabel>
+                            <Input
+                              {...field}
+                              aria-invalid={fieldState.invalid}
+                              id={field.name}
+                              autoComplete="off"
+                              placeholder="user@example.com"
+                            />
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        )}
+                      />
                     </FieldGroup>
                   </FieldSet>
                   <FieldSeparator />
@@ -208,118 +246,171 @@ function Reviews() {
                     <FieldGroup>
                       <FieldLegend>Skin Information</FieldLegend>
                       <div className="grid grid-cols-2 gap-x-3 gap-y-7">
-                        <Field>
-                          <FieldLabel htmlFor="age">Age Range</FieldLabel>
-                          <Select>
-                            <SelectTrigger className="w-full">
-                              <SelectValue
-                                id="age"
-                                placeholder="Select your age range"
-                              />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>Age</SelectLabel>
-                                {ages.map((item) => {
-                                  return (
-                                    <SelectItem key={item} value={item}>
-                                      {formatText(item)}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </Field>
-                        <Field>
-                          <FieldLabel htmlFor="skin_type">Skin Type</FieldLabel>
-                          <Select>
-                            <SelectTrigger className="w-full">
-                              <SelectValue
-                                id="skin_type"
-                                placeholder="Select your skin type"
-                              />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>Skin Type</SelectLabel>
-                                {skin_type.map((item) => {
-                                  return (
-                                    <SelectItem key={item} value={item}>
-                                      {formatText(item)}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </Field>
-                        <Field>
-                          <FieldLabel htmlFor="skin_tone">Skin Tone</FieldLabel>
-                          <Select>
-                            <SelectTrigger className="w-full">
-                              <SelectValue
-                                id="skin_tone"
-                                placeholder="Select your skin tone"
-                              />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup>
-                                <SelectLabel>Skin Tone</SelectLabel>
-                                {skin_tone.map((item) => {
-                                  return (
-                                    <SelectItem key={item} value={item}>
-                                      {formatText(item)}
-                                    </SelectItem>
-                                  );
-                                })}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                        </Field>
-                        <Field>
-                          <FieldLabel htmlFor="skin_concern">
-                            Skin Concerns
-                          </FieldLabel>
-                          <Combobox
-                            modal={false}
-                            items={skin_concerns}
-                            multiple
-                            value={skinConcerns}
-                            onValueChange={setSkinConcerns}
-                          >
-                            <ComboboxChips>
-                              <ComboboxValue>
-                                {skinConcerns.map((item) => (
-                                  <ComboboxChip key={item}>
-                                    {formatText(item)}
-                                  </ComboboxChip>
-                                ))}
-                              </ComboboxValue>
-                              <ComboboxChipsInput
-                                placeholder={
-                                  skinConcerns.length >= 3
-                                    ? undefined
-                                    : "Add concern"
-                                }
-                              />
-                            </ComboboxChips>
-                            <ComboboxContent>
-                              <ComboboxEmpty>No items found.</ComboboxEmpty>
-                              <ComboboxList>
-                                {(item) => (
-                                  <ComboboxItem
-                                    disabled={skinConcerns.length >= 3}
-                                    key={item}
-                                    value={item}
-                                  >
-                                    {formatText(item)}
-                                  </ComboboxItem>
-                                )}
-                              </ComboboxList>
-                            </ComboboxContent>
-                          </Combobox>
-                        </Field>
+                        <Controller
+                          name="age"
+                          control={form.control}
+                          render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                              <FieldLabel htmlFor="age">Age Range *</FieldLabel>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                                aria-invalid={fieldState.invalid}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue
+                                    id={field.name}
+                                    placeholder="Select your age range"
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Age</SelectLabel>
+                                    {ages.map((item) => {
+                                      return (
+                                        <SelectItem key={item} value={item}>
+                                          {formatText(item)}
+                                        </SelectItem>
+                                      );
+                                    })}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
+                          )}
+                        />
+                        <Controller
+                          name="skinType"
+                          control={form.control}
+                          render={({ field, fieldState }) => (
+                            <Field data-invalid={fieldState.invalid}>
+                              <FieldLabel htmlFor="skin_type">
+                                Skin Type
+                              </FieldLabel>
+                              <Select
+                                value={field.value ?? ""}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue
+                                    id="skin_type"
+                                    placeholder="Select your skin type"
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Skin Type</SelectLabel>
+                                    {skin_type.map((item) => {
+                                      return (
+                                        <SelectItem key={item} value={item}>
+                                          {formatText(item)}
+                                        </SelectItem>
+                                      );
+                                    })}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
+                          )}
+                        />
+                        <Controller
+                          name="skinTone"
+                          control={form.control}
+                          render={({ field, fieldState }) => (
+                            <Field data-invaid={fieldState.invalid}>
+                              <FieldLabel htmlFor="skin_tone">
+                                Skin Tone *
+                              </FieldLabel>
+                              <Select
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <SelectTrigger className="w-full">
+                                  <SelectValue
+                                    id="skin_tone"
+                                    placeholder="Select your skin tone"
+                                  />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectGroup>
+                                    <SelectLabel>Skin Tone</SelectLabel>
+                                    {skin_tone.map((item) => {
+                                      return (
+                                        <SelectItem key={item} value={item}>
+                                          {formatText(item)}
+                                        </SelectItem>
+                                      );
+                                    })}
+                                  </SelectGroup>
+                                </SelectContent>
+                              </Select>
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
+                          )}
+                        />
+                        <Controller
+                          name="skinConcern"
+                          control={form.control}
+                          render={({ field, fieldState }) => (
+                            <Field data-invaid={fieldState.invalid}>
+                              <FieldLabel htmlFor="skin_concern">
+                                Skin Concerns
+                              </FieldLabel>
+                              <Combobox
+                                modal={false}
+                                items={skin_concerns}
+                                multiple
+                                value={field.value}
+                                onValueChange={field.onChange}
+                              >
+                                <ComboboxChips>
+                                  <ComboboxValue>
+                                    {field.value?.map((item) => (
+                                      <ComboboxChip key={item}>
+                                        {formatText(item)}
+                                      </ComboboxChip>
+                                    ))}
+                                  </ComboboxValue>
+                                  <ComboboxChipsInput
+                                    placeholder={
+                                      field.value && field.value?.length >= 3
+                                        ? undefined
+                                        : "Add concern"
+                                    }
+                                  />
+                                </ComboboxChips>
+                                <ComboboxContent>
+                                  <ComboboxEmpty>No items found.</ComboboxEmpty>
+                                  <ComboboxList>
+                                    {(item) => (
+                                      <ComboboxItem
+                                        disabled={
+                                          field.value !== null &&
+                                          field.value?.length >= 3
+                                        }
+                                        key={item}
+                                        value={item}
+                                      >
+                                        {formatText(item)}
+                                      </ComboboxItem>
+                                    )}
+                                  </ComboboxList>
+                                </ComboboxContent>
+                              </Combobox>
+                              {fieldState.invalid && (
+                                <FieldError errors={[fieldState.error]} />
+                              )}
+                            </Field>
+                          )}
+                        />
                       </div>
                     </FieldGroup>
                   </FieldSet>
@@ -327,41 +418,78 @@ function Reviews() {
                   <FieldSet>
                     <FieldGroup>
                       <FieldLegend>Customer Review</FieldLegend>
-                      <Field>
-                        <div className="flex items-center justify-between">
-                          <FieldLabel htmlFor="rating">Rating</FieldLabel>
-                          <span className="text-sm">{rating}</span>
-                        </div>
-                        <Slider
-                          id="rating"
-                          name="rating"
-                          defaultValue={[1]}
-                          max={5}
-                          min={1}
-                          step={1}
-                          value={rating}
-                          onValueChange={setRating}
-                          className="w-full"
-                        />
-                        <FieldDescription>
-                          Please rate the product from 1 to 5
-                        </FieldDescription>
-                      </Field>
-                      <Field>
-                        <FieldLabel htmlFor="title">Title</FieldLabel>
-                        <Input id="title" name="title" />
-                        <FieldDescription>
-                          Please give the review a title
-                        </FieldDescription>
-                      </Field>
-                      <Field>
-                        <FieldLabel htmlFor="comment">Review</FieldLabel>
-                        <Textarea
-                          id="comment"
-                          name="comment"
-                          placeholder="How do you feel about the product?"
-                        />
-                      </Field>
+                      <Controller
+                        name="rating"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <div className="flex items-center justify-between">
+                              <FieldLabel htmlFor={field.name}>
+                                Rating *
+                              </FieldLabel>
+                              <span className="text-sm">{field.value}</span>
+                            </div>
+                            <Slider
+                              id={field.name}
+                              max={5}
+                              min={1}
+                              step={1}
+                              value={field.value}
+                              onValueChange={field.onChange}
+                              className="w-full"
+                            />
+                            <FieldDescription>
+                              Please rate the product from 1 to 5
+                            </FieldDescription>
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        )}
+                      />
+                      <Controller
+                        name="title"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                              Title *
+                            </FieldLabel>
+                            <Input
+                              {...field}
+                              aria-invalid={fieldState.invalid}
+                              id={field.name}
+                              autoComplete="off"
+                            />
+                            <FieldDescription>
+                              Please give the review a title
+                            </FieldDescription>
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        )}
+                      />
+                      <Controller
+                        name="comment"
+                        control={form.control}
+                        render={({ field, fieldState }) => (
+                          <Field data-invalid={fieldState.invalid}>
+                            <FieldLabel htmlFor={field.name}>
+                              Review *
+                            </FieldLabel>
+                            <Textarea
+                              {...field}
+                              aria-invalid={fieldState.invalid}
+                              id={field.name}
+                              placeholder="How do you feel about the product?"
+                            />
+                            {fieldState.invalid && (
+                              <FieldError errors={[fieldState.error]} />
+                            )}
+                          </Field>
+                        )}
+                      />
                     </FieldGroup>
                   </FieldSet>
                   <Field orientation="vertical">
@@ -385,18 +513,18 @@ function Reviews() {
             </Button>
           </div>
           <div>
-            {reviews.map((item, i) => {
+            {product?.reviews?.map((item, i) => {
               return (
                 <div
                   key={item.id}
-                  className={`py-4 ${i !== reviews.length - 1 && "border-b border-b-foreground/20"}`}
+                  className={`py-4 ${product?.reviews && i !== product?.reviews?.length - 1 && "border-b border-b-foreground/20"}`}
                 >
                   <ReviewCard item={item} />
                 </div>
               );
             })}
           </div>
-          {reviews.length === 1 && (
+          {product?.reviews?.length === 1 && (
             <div className="mt-3">
               <PurchaseButton text="Show More" />
             </div>

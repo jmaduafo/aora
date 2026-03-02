@@ -133,7 +133,9 @@ async function main() {
       name: "Koi Silk Hydrating Cream",
       prices: [52, 72],
       quantity: [40, 22],
-      images: ["https://aora-images.s3.eu-north-1.amazonaws.com/Cream_Tube.png"],
+      images: [
+        "https://aora-images.s3.eu-north-1.amazonaws.com/Cream_Tube.png",
+      ],
       description:
         "A rich yet weightless cream that deeply hydrates, smooths texture, and strengthens the skin barrier.",
       keyIngredients: [
@@ -163,11 +165,13 @@ async function main() {
       aromas: ["Creamy vanilla", "Soft jasmine"],
       categories: [face.id, creams.id],
     },
-       {
+    {
       name: "Amber Glow Facial Oil",
       prices: [45],
       quantity: [27],
-      images: ["https://aora-images.s3.eu-north-1.amazonaws.com/DROPPER_BOTTLE.png"],
+      images: [
+        "https://aora-images.s3.eu-north-1.amazonaws.com/DROPPER_BOTTLE.png",
+      ],
       description:
         "A nourishing facial oil that restores radiance, softens fine lines, and delivers a luminous finish.",
       keyIngredients: ["Rosehip Oil", "Jojoba Oil", "Vitamin C", "Marula Oil"],
@@ -326,8 +330,10 @@ async function main() {
     },
   ];
 
+  const createdProducts: Record<string, string> = {};
+
   for (const product of products) {
-    await prisma.product.upsert({
+    const created = await prisma.product.upsert({
       where: { name: product.name }, // Assuming title is unique for seeding
       update: {},
       create: {
@@ -349,7 +355,128 @@ async function main() {
         },
       },
     });
+
+    // Store name -> id
+    createdProducts[product.name] = created.id;
   }
+
+  const review = await prisma.review.upsert({
+    where: {
+      // You should use a real unique constraint here
+      userId_productId: {
+        userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+        productId: createdProducts["Velvet Ember Body Cream"],
+      },
+    },
+    update: {},
+    create: {
+      email: "trina@gmail.com",
+      firstName: "Trina",
+      lastName: "Withers",
+      fullName: "Trina Withers",
+      rating: 5,
+      title: "Changed my life!",
+      comment: "I’ve been using this facial oil for three weeks, and my dry, dull skin is completely transformed! It feels incredibly nourishing but sinks in within seconds, leaving zero greasy residue—just a beautiful, hydrated glow. I love that it’s lightweight enough for morning use under makeup, but hydrating enough for a nightly repair routine. It hasn't caused any breakouts on my acne-prone skin either. A little goes a long way. Already bought a second bottle!",
+      age: "AGE_25_34",
+      skinTone: "BROWN",
+      skinConcern: ["HYPERPIGMENTATION", "DARK_SPOTS"],
+      skinType: "COMBINATION",
+      userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+
+      product: {
+        connect: {
+          id: createdProducts["Velvet Ember Body Cream"],
+        },
+      },
+    },
+  });
+
+  await prisma.review.upsert({
+    where: {
+      // You should use a real unique constraint here
+      userId_productId: {
+        userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+        productId: createdProducts["Amber Glow Facial Oil"],
+      },
+    },
+    update: {},
+    create: {
+      email: "trina@gmail.com",
+      firstName: "Trina",
+      lastName: "Withers",
+      fullName: "Trina Withers",
+      rating: 4,
+      title: "It did wonders for my skin",
+      comment: "This body cream is undeniably thick and creamy, making it perfect for intense hydration on my dry elbows and legs, especially in the winter. My skin feels super soft and silky for hours. I took off one star only because the scent is very intense. It smells lovely (like vanilla), but it is a bit overpowering for sensitive noses and lingers all day. If you don't mind a strong fragrance, this is a 5-star product!",
+      age: "AGE_25_34",
+      skinTone: "BROWN",
+      skinConcern: ["HYPERPIGMENTATION", "DARK_SPOTS"],
+      skinType: "COMBINATION",
+      userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+      product: {
+        connect: {
+          id: createdProducts["Amber Glow Facial Oil"],
+        },
+      },
+    },
+  });
+
+  await prisma.favorite.upsert({
+    where: {
+      // You should use a real unique constraint here
+      userId_productId: {
+        userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+        productId: createdProducts["Amber Glow Facial Oil"],
+      },
+    },
+    update: {},
+    create: {
+      userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+      product: {
+        connect: {
+          id: createdProducts["Amber Glow Facial Oil"],
+        },
+      },
+    },
+  });
+  
+  await prisma.favorite.upsert({
+    where: {
+      // You should use a real unique constraint here
+      userId_productId: {
+        userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+        productId: createdProducts["Velvet Ember Body Cream"],
+      },
+    },
+    update: {},
+    create: {
+      userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+      product: {
+        connect: {
+          id: createdProducts["Velvet Ember Body Cream"],
+        },
+      },
+    },
+  });
+
+  await prisma.helpful.upsert({
+    where: {
+      // You should use a real unique constraint here
+      userId_reviewId: {
+        userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+        reviewId: review.id,
+      },
+    },
+    update: {},
+    create: {
+      userId: "e36572d3-3a3e-47de-bccf-8ad682c3c049",
+      review: {
+        connect: {
+          id: review.id,
+        },
+      },
+    },
+  });
 }
 main()
   .then(async () => {
