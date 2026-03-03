@@ -38,11 +38,13 @@ export default function RootLayout({
         <main className="px-6">{children}</main>
         <Footer />
         <Toaster
+          closeButton
           toastOptions={{
             classNames: {
-              toast: "font-montrealBook bg-background text-foreground",
-              title: "text-sm! font-montrealMedium!",
-              description: "text-sm! text-foreground/70!",
+              toast:
+                "items-start! font-montrealBook bg-background text-foreground",
+              title: "uppercase text-sm! font-montrealMedium!",
+              description: "text-[13px]! text-foreground/70!",
             },
           }}
         />

@@ -1,19 +1,109 @@
+"use client";
+
 import { Review } from "@/types/type";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Header5 from "../headings/Header5";
 import Paragraph from "../headings/Paragraph";
 import { format } from "timeago.js";
 import Header6 from "../headings/Header6";
 import { checkForS, formatText, getRating } from "@/utils/helpers";
 import LikeButton from "../buttons/LikeButton";
+import { Button } from "../button";
+import { Ellipsis } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../alert-dialog";
+import { deleteReview } from "@/prisma/actions";
+import { toast } from "sonner";
+import Loading from "../loading/Loading";
 
 type Card = {
   readonly item: Review;
+  readonly user_id: string;
 };
 
-function ReviewCard({ item }: Card) {
+function ReviewCard({ item, user_id }: Card) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function deleteCard(userId: string, productId: string) {
+    setIsLoading(true);
+    try {
+      await deleteReview(userId, productId);
+
+      toast.success("Success!", {
+        description: "Your review was deleted successfully",
+      });
+    } catch (err: any) {
+      toast.error("Something went wrong", {
+        description: err.message,
+      });
+    } finally {
+      setIsLoading(false);
+      setIsAlertOpen(false)
+    }
+  }
   return (
     <div className="">
+      <div className="flex justify-end">
+        {user_id === item.userId && (
+          <DropdownMenu open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"link"} type="button">
+                <Ellipsis />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                {/* <DropdownMenuItem>Edit</DropdownMenuItem> */}
+                <DropdownMenuItem
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    setIsAlertOpen(true);
+                  }}
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+        <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete your
+                review for this product.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={isLoading}
+                onClick={() => deleteCard(user_id, item.productId)}
+              >
+                {isLoading ? <Loading/> : "Continue"}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
       <div className="flex justify-between gap-3">
         <Header5 text={item.title} className="font-montrealMedium" />
         <p className="font-montrealMedium uppercase text-xs text-foreground/50">
@@ -36,10 +126,13 @@ function ReviewCard({ item }: Card) {
         <AdditionalInfo title="Age" content={[item.age]} />
       </div>
       <div className="mt-6">
-        <Paragraph text={item.comment} />
+        <p className="text-sm">{item.comment}</p>
       </div>
       <div className="flex justify-end mt-2">
-        <LikeButton likes={item.helpfuls ? item.helpfuls.length : 0} desc="Helpful?" />
+        <LikeButton
+          likes={item.helpfuls ? item.helpfuls.length : 0}
+          desc="Helpful?"
+        />
       </div>
     </div>
   );

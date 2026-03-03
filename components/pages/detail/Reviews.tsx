@@ -57,7 +57,7 @@ import {
   ratingRanking,
 } from "@/utils/helpers";
 import { ArrowRight, ListFilter } from "lucide-react";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
@@ -65,9 +65,12 @@ import { ReviewSchema } from "@/zod/validation";
 import * as z from "zod";
 import { createReview } from "@/prisma/actions";
 import { toast } from "sonner";
+import Loading from "@/components/ui/loading/Loading";
 
 function Reviews({ product }: { readonly product: Product | undefined }) {
   const [isReviewOpen, setIsReviewOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userId, setUserId] = useState("");
 
   const form = useForm<z.infer<typeof ReviewSchema>>({
     resolver: zodResolver(ReviewSchema),
@@ -85,11 +88,17 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
     },
   });
 
-  async function onSubmit(data: z.infer<typeof ReviewSchema>) {
-    try {
-      const user_id = localStorage.getItem("aora_id");
+  useEffect(() => {
+    const user_id = localStorage.getItem("aora_id");
 
-      if (!user_id || !product) {
+    user_id ? setUserId(user_id) : setUserId("");
+  }, []);
+
+  async function onSubmit(data: z.infer<typeof ReviewSchema>) {
+    setIsLoading(true);
+
+    try {
+      if (!userId.length || !product) {
         toast.error("Something went wrong", {
           description:
             "We could not identify your user ID. Please refresh the page and try again.",
@@ -109,17 +118,36 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
         skinTone: data.skinTone,
         skinType: data.skinType,
         skinConcern: data.skinConcern,
-        userId: user_id,
+        userId: userId,
         product: {
           connect: { id: product.id },
         },
       });
 
       toast.success("Success!", {
-        description: "Your review was submitted successfully!",
+        description:
+          "Your review was submitted successfully and is pending approval.",
+        duration: Infinity,
       });
     } catch (err: any) {
-      toast.error("Something went wrong", { description: err.message });
+      if (err.message.toLowerCase().includes("unique constraint failed")) {
+        toast.error("Something went wrong", {
+          description:
+            "You have already written a review for this product. Users are allowed one review per product.",
+          duration: Infinity,
+        });
+
+        return;
+      }
+
+      toast.error("Something went wrong", {
+        description: err.message,
+        duration: Infinity,
+      });
+
+      return;
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -493,7 +521,13 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                     </FieldGroup>
                   </FieldSet>
                   <Field orientation="vertical">
-                    <Button type="submit">Submit</Button>
+                    {isLoading ? (
+                      <Button type="button" disabled>
+                        <Loading />
+                      </Button>
+                    ) : (
+                      <Button type="submit">Submit</Button>
+                    )}
                     <Button
                       variant="outline"
                       type="button"
@@ -519,7 +553,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                   key={item.id}
                   className={`py-4 ${product?.reviews && i !== product?.reviews?.length - 1 && "border-b border-b-foreground/20"}`}
                 >
-                  <ReviewCard item={item} />
+                  <ReviewCard user_id={userId} item={item} />
                 </div>
               );
             })}
