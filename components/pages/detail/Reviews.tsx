@@ -189,6 +189,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
           </div>
         </div>
         <div className="flex-1">
+          {/* WRITE A REVIEW */}
           <Dialog open={isReviewOpen} onOpenChange={setIsReviewOpen}>
             <DialogTrigger className="flex items-center gap-2 group">
               <Header4 text="Write a Review" className="font-montrealMedium" />
@@ -198,11 +199,13 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
               <DialogHeader>
                 <DialogTitle>Review form</DialogTitle>
               </DialogHeader>
+              {/* REVIEW FORM POP UP */}
               <form onSubmit={form.handleSubmit(onSubmit)}>
                 <FieldGroup>
                   <FieldSet>
                     <FieldGroup>
                       <div className="grid grid-cols-2 gap-3">
+                        {/* FIRST NAME */}
                         <Controller
                           name="firstName"
                           control={form.control}
@@ -224,6 +227,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                             </Field>
                           )}
                         />
+                        {/* LAST NAME */}
                         <Controller
                           name="lastName"
                           control={form.control}
@@ -246,6 +250,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                           )}
                         />
                       </div>
+                      {/* EMAIL */}
                       <Controller
                         name="email"
                         control={form.control}
@@ -274,6 +279,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                     <FieldGroup>
                       <FieldLegend>Skin Information</FieldLegend>
                       <div className="grid grid-cols-2 gap-x-3 gap-y-7">
+                        {/* AGE RANGE */}
                         <Controller
                           name="age"
                           control={form.control}
@@ -310,6 +316,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                             </Field>
                           )}
                         />
+                        {/* SKIN TYPE */}
                         <Controller
                           name="skinType"
                           control={form.control}
@@ -347,6 +354,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                             </Field>
                           )}
                         />
+                        {/* SKIN TONE */}
                         <Controller
                           name="skinTone"
                           control={form.control}
@@ -384,6 +392,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                             </Field>
                           )}
                         />
+                        {/* SKIN CONCERNS */}
                         <Controller
                           name="skinConcern"
                           control={form.control}
@@ -446,6 +455,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                   <FieldSet>
                     <FieldGroup>
                       <FieldLegend>Customer Review</FieldLegend>
+                      {/* RATING */}
                       <Controller
                         name="rating"
                         control={form.control}
@@ -475,6 +485,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                           </Field>
                         )}
                       />
+                      {/* TITLE */}
                       <Controller
                         name="title"
                         control={form.control}
@@ -498,6 +509,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                           </Field>
                         )}
                       />
+                      {/* REVIEW COMMENT */}
                       <Controller
                         name="comment"
                         control={form.control}
@@ -520,6 +532,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                       />
                     </FieldGroup>
                   </FieldSet>
+                  {/* SUBMIT & CANCEL BUTTONS */}
                   <Field orientation="vertical">
                     {isLoading ? (
                       <Button type="button" disabled>
@@ -546,6 +559,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
               Filter
             </Button>
           </div>
+          {/* REVIEW CARD RENDER */}
           <div>
             {product?.reviews?.map((item, i) => {
               return (
@@ -558,7 +572,8 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
               );
             })}
           </div>
-          {product?.reviews?.length === 1 && (
+          {/* SHOW MORE BUTTON */}
+          {product?.reviews && product?.reviews?.length >= 3 && (
             <div className="mt-3">
               <PurchaseButton text="Show More" />
             </div>

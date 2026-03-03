@@ -1,7 +1,11 @@
 "use client";
 
 import { Review } from "@/types/type";
-import React, { Fragment, useState } from "react";
+import React, {
+  Fragment,
+  useEffect,
+  useState,
+} from "react";
 import Header5 from "../headings/Header5";
 import Paragraph from "../headings/Paragraph";
 import { format } from "timeago.js";
@@ -27,9 +31,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../alert-dialog";
-import { deleteReview } from "@/prisma/actions";
+import { createHelpful, deleteHelpful, deleteReview } from "@/prisma/actions";
 import { toast } from "sonner";
 import Loading from "../loading/Loading";
+import { useRouter } from "next/navigation";
 
 type Card = {
   readonly item: Review;
@@ -41,6 +46,10 @@ function ReviewCard({ item, user_id }: Card) {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [isHelpful, setIsHelpful] = useState(false);
+
+  const router = useRouter();
+
   async function deleteCard(userId: string, productId: string) {
     setIsLoading(true);
     try {
@@ -49,15 +58,48 @@ function ReviewCard({ item, user_id }: Card) {
       toast.success("Success!", {
         description: "Your review was deleted successfully",
       });
+
+      router.refresh();
     } catch (err: any) {
       toast.error("Something went wrong", {
         description: err.message,
       });
     } finally {
       setIsLoading(false);
-      setIsAlertOpen(false)
+      setIsAlertOpen(false);
     }
   }
+
+  async function handleHelpful(userId: string, reviewId: string) {
+    if (!userId.length || !reviewId) return;
+
+    setIsHelpful((prev) => !prev);
+
+    if (isHelpful) {
+      await deleteHelpful(userId, reviewId);
+    } else {
+      await createHelpful(userId, reviewId);
+    }
+
+    router.refresh();
+  }
+
+  useEffect(() => {
+    if (!item?.helpfuls) {
+      return;
+    }
+
+    console.log(user_id)
+    console.log(item.id)
+
+    const userHelped = item.helpfuls?.find(
+      (helpful) => helpful.userId === user_id && helpful.reviewId === item.id,
+    );
+
+    userHelped ? setIsHelpful(true) : setIsHelpful(false);
+    
+  }, [user_id]);
+
   return (
     <div className="">
       <div className="flex justify-end">
@@ -98,7 +140,7 @@ function ReviewCard({ item, user_id }: Card) {
                 disabled={isLoading}
                 onClick={() => deleteCard(user_id, item.productId)}
               >
-                {isLoading ? <Loading/> : "Continue"}
+                {isLoading ? <Loading /> : "Continue"}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
@@ -130,8 +172,10 @@ function ReviewCard({ item, user_id }: Card) {
       </div>
       <div className="flex justify-end mt-2">
         <LikeButton
+          isLiked={isHelpful}
           likes={item.helpfuls ? item.helpfuls.length : 0}
           desc="Helpful?"
+          action={() => handleHelpful(user_id, item?.id)}
         />
       </div>
     </div>
