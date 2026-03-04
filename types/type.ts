@@ -20,7 +20,7 @@ export type Product = {
   aromas?: string[];
   reviews?: Review[];
   updatedAt?: Date | null;
-  createdAt?: Date;
+  createdAt: Date;
 };
 
 export type Cart = {

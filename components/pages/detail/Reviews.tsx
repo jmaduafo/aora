@@ -129,6 +129,9 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
           "Your review was submitted successfully and is pending approval.",
         duration: Infinity,
       });
+
+      setIsReviewOpen(false)
+      form.reset()
     } catch (err: any) {
       if (err.message.toLowerCase().includes("unique constraint failed")) {
         toast.error("Something went wrong", {

@@ -14,14 +14,10 @@ import Header2 from "@/components/ui/headings/Header2";
 import Header6 from "@/components/ui/headings/Header6";
 import Paragraph from "@/components/ui/headings/Paragraph";
 import { Category, Product } from "@/types/type";
+import { shopSort } from "@/utils/data";
 import { checkForS } from "@/utils/helpers";
-import {
-  ArrowDownAZ,
-  ArrowDownNarrowWide,
-  ArrowDownWideNarrow,
-  ArrowDownZA,
-  ArrowUpDown,
-} from "lucide-react";
+import { useFilterProductStore } from "@/zustand/store";
+import { ArrowUpDown } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 
 type CategoryShop = {
@@ -31,35 +27,26 @@ type CategoryShop = {
 
 function Shop({ categories, allProducts }: CategoryShop) {
   const [category, setCategory] = useState("all");
-  const [categoryProducts, setCategoryProducts] = useState<Category>({});
 
-  const findCategory = () => {
-    const cat = categories.find(
-      (item) => item?.name?.toLowerCase() === category.toLowerCase(),
-    );
+  const { products, filterItems, filterCategory, setProducts, setCategories } =
+    useFilterProductStore();
 
-    if (cat) {
-      setCategoryProducts(cat);
-    }
+  const sort = (type: string, order: string) => {
+    filterItems(type, order);
   };
 
   useEffect(() => {
-    findCategory();
+    if (category === "all") {
+      setProducts(allProducts);
+    } else {
+      filterCategory(category);
+    }
   }, [category]);
 
-  const other = categoryProducts?.products
-    ? categoryProducts?.products.map((item) => {
-        return (
-          <Fragment key={item.id}>
-            <ShopCard item={item} />
-          </Fragment>
-        );
-      })
-    : null;
-
-  const otherS = categoryProducts?.products
-    ? categoryProducts.products.length
-    : 0;
+  useEffect(() => {
+    setProducts(allProducts);
+    setCategories(categories);
+  }, []);
 
   return (
     <>
@@ -74,7 +61,7 @@ function Shop({ categories, allProducts }: CategoryShop) {
             ]}
           />
           <Header6
-            text={`${category === "all" ? allProducts.length : categoryProducts?.products?.length} result${checkForS(category === "all" ? allProducts.length : otherS)}`}
+            text={`${products.length} result${checkForS(products.length)}`}
           />
         </div>
         <div className="flex justify-between items-end gap-3">
@@ -111,19 +98,18 @@ function Shop({ categories, allProducts }: CategoryShop) {
               <DropdownMenuContent>
                 <DropdownMenuGroup>
                   <DropdownMenuLabel>Sort</DropdownMenuLabel>
-                  <DropdownMenuItem>
-                    <ArrowDownAZ className="text-foreground group-hover:text-background" /> Name
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <ArrowDownZA className="text-foreground group-hover:text-background" /> Name
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <ArrowDownNarrowWide className="text-foreground group-hover:text-background" /> Price
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <ArrowDownWideNarrow className="text-foreground group-hover:text-background" /> Price
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>Recently Added</DropdownMenuItem>
+                  {shopSort.map((item) => {
+                    return (
+                      <DropdownMenuItem
+                        key={`${item.type} ${item.order}`}
+                        onClick={() => sort(item.type, item.order)}
+                        className="capitalize"
+                      >
+                        <item.icon className="text-foreground group-hover:text-background" />{" "}
+                        {item.type}
+                      </DropdownMenuItem>
+                    );
+                  })}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -131,18 +117,14 @@ function Shop({ categories, allProducts }: CategoryShop) {
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
-        {category === "all"
-          ? allProducts.map((item) => {
-              return (
-                <Fragment key={item.id}>
-                  <ShopCard item={item} />
-                </Fragment>
-              );
-            })
-          : other}
-        {!allProducts.length ||
-          (categoryProducts?.products &&
-            !categoryProducts?.products?.length && <p>No products</p>)}
+        {products.map((item) => {
+          return (
+            <Fragment key={item.id}>
+              <ShopCard item={item} />
+            </Fragment>
+          );
+        })}
+        {!products.length && <p>No products</p>}
       </div>
     </>
   );

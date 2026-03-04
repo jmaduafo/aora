@@ -1,4 +1,12 @@
 import { Package } from "@/types/type";
+import {
+  ArrowDownAZ,
+  ArrowDownZA,
+  ArrowDownNarrowWide,
+  ArrowDownWideNarrow,
+  CalendarArrowDown,
+  CalendarArrowUp,
+} from "lucide-react";
 
 export const services = [
   {
@@ -230,6 +238,39 @@ export const contact = [
   },
   {
     title: "(123) 456 7890",
+  },
+];
+
+export const shopSort = [
+  {
+    type: "name",
+    order: "asc",
+    icon: ArrowDownAZ,
+  },
+  {
+    type: "name",
+    order: "desc",
+    icon: ArrowDownZA,
+  },
+  {
+    type: "price",
+    order: "asc",
+    icon: ArrowDownNarrowWide,
+  },
+  {
+    type: "price",
+    order: "desc",
+    icon: ArrowDownWideNarrow,
+  },
+  {
+    type: "date",
+    order: "asc",
+    icon: CalendarArrowDown,
+  },
+  {
+    type: "date",
+    order: "desc",
+    icon: CalendarArrowUp,
   },
 ];
 

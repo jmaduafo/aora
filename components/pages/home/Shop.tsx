@@ -39,7 +39,8 @@ async function Shop() {
     images: true,
     name: true,
     id: true,
-    prices: true
+    prices: true,
+    createdAt: true
   },
  })
 

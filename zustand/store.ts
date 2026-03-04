@@ -1,4 +1,4 @@
-import { Cart } from "@/types/type";
+import { Cart, Category, Product, Review } from "@/types/type";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -9,6 +9,21 @@ type CartStore = {
   updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   getTotal: () => number;
+};
+
+type FilterReviewStore = {
+  reviews: Review[];
+  setReviews: (reviews: Review[]) => void;
+  filterItem: (type: string, order: string) => void;
+};
+
+type FilterProductStore = {
+  products: Product[];
+  categories: Category[];
+  setProducts: (products: Product[]) => void;
+  setCategories: (categories: Category[]) => void;
+  filterItems: (type: string, order: string) => void;
+  filterCategory: (category: string) => void;
 };
 
 export const useCartStore = create<CartStore>()(
@@ -65,4 +80,135 @@ export const useCartStore = create<CartStore>()(
       name: "cart-storage", // localStorage key
     },
   ),
+);
+
+export const useFilterReviewStore = create<FilterReviewStore>()((set, get) => ({
+  reviews: [],
+  setReviews: (reviews) => {
+    set((state) => {
+      return { reviews: reviews };
+    });
+  },
+  filterItem: (type, order) => {
+    set((state) => {
+      if (type === "date") {
+        if (order === "asc") {
+          return {
+            reviews: state.reviews.toSorted(
+              (a, b) =>
+                new Date(a.createdAt).getTime() -
+                new Date(b.createdAt).getTime(),
+            ),
+          };
+        } else {
+          return {
+            reviews: state.reviews.toSorted(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+            ),
+          };
+        }
+      } else if (type === "rating") {
+        if (order === "asc") {
+          return {
+            reviews: state.reviews.toSorted((a, b) => a.rating - b.rating),
+          };
+        } else {
+          return {
+            reviews: state.reviews.toSorted((a, b) => b.rating - a.rating),
+          };
+        }
+      }
+
+      return {};
+    });
+  },
+}));
+
+export const useFilterProductStore = create<FilterProductStore>()(
+  (set, get) => ({
+    products: [],
+    categories: [],
+    setProducts: (products) => {
+      set((state) => {
+        return { products: products };
+      });
+    },
+    setCategories: (categories) => {
+      set((state) => {
+        return { categories: categories };
+      });
+    },
+    filterItems: (type, order) => {
+      set((state) => {
+        if (type === "date") {
+          if (order === "asc") {
+            return {
+              products: state.products.toSorted(
+                (a, b) =>
+                  new Date(a.createdAt).getTime() -
+                  new Date(b.createdAt).getTime(),
+              ),
+            };
+          } else {
+            return {
+              products: state.products.toSorted(
+                (a, b) =>
+                  new Date(b.createdAt).getTime() -
+                  new Date(a.createdAt).getTime(),
+              ),
+            };
+          }
+        } else if (type === "name") {
+          if (order === "asc") {
+            return {
+              products: state.products.toSorted((a, b) =>
+                a.name.localeCompare(b.name),
+              ),
+            };
+          } else {
+            return {
+              products: state.products.toSorted((a, b) =>
+                b.name.localeCompare(a.name),
+              ),
+            };
+          }
+        } else if (type === "price") {
+          if (order === "asc") {
+            return {
+              products: state.products.toSorted(
+                (a, b) => a.prices[0] - b.prices[0],
+              ),
+            };
+          } else {
+            return {
+              products: state.products.toSorted(
+                (a, b) => b.prices[0] - a.prices[0],
+              ),
+            };
+          }
+        }
+
+        return {};
+      });
+    },
+    filterCategory: (category) => {
+      set((state) => {
+        if (category !== "all") {
+          const cat = state.categories.find(
+            (item) => item.name?.toLowerCase() === category.toLowerCase(),
+          );
+
+          if (cat) {
+            return {
+              products: cat.products,
+            };
+          }
+        }
+
+        return {};
+      });
+    },
+  }),
 );
