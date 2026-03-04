@@ -130,8 +130,8 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
         duration: Infinity,
       });
 
-      setIsReviewOpen(false)
-      form.reset()
+      setIsReviewOpen(false);
+      form.reset();
     } catch (err: any) {
       if (err.message.toLowerCase().includes("unique constraint failed")) {
         toast.error("Something went wrong", {
@@ -564,16 +564,22 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
           </div>
           {/* REVIEW CARD RENDER */}
           <div>
-            {product?.reviews?.map((item, i) => {
-              return (
-                <div
-                  key={item.id}
-                  className={`py-4 ${product?.reviews && i !== product?.reviews?.length - 1 && "border-b border-b-foreground/20"}`}
-                >
-                  <ReviewCard user_id={userId} item={item} />
-                </div>
-              );
-            })}
+            {product?.reviews?.length ? (
+              product?.reviews?.map((item, i) => {
+                return (
+                  <div
+                    key={item.id}
+                    className={`py-4 ${product?.reviews && i !== product?.reviews?.length - 1 && "border-b border-b-foreground/20"}`}
+                  >
+                    <ReviewCard user_id={userId} item={item} />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="mt-[10vh] flex justify-center">
+                <Header6 text="Be the first to review" />
+              </div>
+            )}
           </div>
           {/* SHOW MORE BUTTON */}
           {product?.reviews && product?.reviews?.length >= 3 && (

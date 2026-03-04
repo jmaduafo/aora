@@ -26,12 +26,13 @@ async function MainPage() {
       name: true,
       id: true,
       prices: true,
+      createdAt: true
     },
   });
 
   return (
     <section className="pb-10 min-h-[55vh] relative">
-      <Shop categories={categories} allProducts={allProducts} />
+      <Shop allCategories={categories} allProducts={allProducts} />
     </section>
   );
 }

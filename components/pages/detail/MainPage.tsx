@@ -49,6 +49,7 @@ async function getSimilarProducts(product_name: string) {
       prices: true,
       name: true,
       images: true,
+      createdAt: true
     },
     where: {
       id: { in: similarIds },
