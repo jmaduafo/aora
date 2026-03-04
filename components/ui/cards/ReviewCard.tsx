@@ -1,11 +1,7 @@
 "use client";
 
 import { Review } from "@/types/type";
-import React, {
-  Fragment,
-  useEffect,
-  useState,
-} from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Header5 from "../headings/Header5";
 import Paragraph from "../headings/Paragraph";
 import { format } from "timeago.js";
@@ -47,11 +43,13 @@ function ReviewCard({ item, user_id }: Card) {
   const [isLoading, setIsLoading] = useState(false);
 
   const [isHelpful, setIsHelpful] = useState(false);
+  const [isHelpfulLoading, setIsHelpfulLoading] = useState(false);
 
   const router = useRouter();
 
   async function deleteCard(userId: string, productId: string) {
     setIsLoading(true);
+
     try {
       await deleteReview(userId, productId);
 
@@ -71,33 +69,41 @@ function ReviewCard({ item, user_id }: Card) {
   }
 
   async function handleHelpful(userId: string, reviewId: string) {
-    if (!userId.length || !reviewId) return;
+    setIsHelpfulLoading(true);
 
-    setIsHelpful((prev) => !prev);
+    try {
+      if (!userId.length || !reviewId) return;
 
-    if (isHelpful) {
-      await deleteHelpful(userId, reviewId);
-    } else {
-      await createHelpful(userId, reviewId);
+      // TOGGLES BETWEEN TRUE AND FALSE ON HELPFUL CLICK
+      setIsHelpful((prev) => !prev);
+
+      // DELETES OR ADDS HELPFUL BY USER AND REVIEW ID
+      if (isHelpful) {
+        await deleteHelpful(userId, reviewId);
+      } else {
+        await createHelpful(userId, reviewId);
+      }
+
+      // ROUTER REFRESH TO GET NEW DATA
+      router.refresh();
+    } catch (err: any) {
+      console.log(err.message);
+    } finally {
+      setIsHelpfulLoading(false);
     }
-
-    router.refresh();
   }
 
+  // DETERMINES IF THE USER HAS ALREADY DEEMED THE REVIEW AS HELPFUL
   useEffect(() => {
     if (!item?.helpfuls) {
       return;
     }
-
-    console.log(user_id)
-    console.log(item.id)
 
     const userHelped = item.helpfuls?.find(
       (helpful) => helpful.userId === user_id && helpful.reviewId === item.id,
     );
 
     userHelped ? setIsHelpful(true) : setIsHelpful(false);
-    
   }, [user_id]);
 
   return (
@@ -176,6 +182,7 @@ function ReviewCard({ item, user_id }: Card) {
           likes={item.helpfuls ? item.helpfuls.length : 0}
           desc="Helpful?"
           action={() => handleHelpful(user_id, item?.id)}
+          isLoading={isHelpfulLoading}
         />
       </div>
     </div>

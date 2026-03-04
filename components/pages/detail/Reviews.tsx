@@ -161,7 +161,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
           />
           <div className="flex items-center gap-4 mt-[6vh]">
             <Header4
-              text={`${product?.reviews ? averageRating(product?.reviews?.map((item) => item.rating)).toFixed(2) : 0}`}
+              text={`${product?.reviews ? (Number.isNaN(averageRating(product?.reviews?.map((item) => item.rating))) ? "No reviews yet" : averageRating(product?.reviews?.map((item) => item.rating)).toFixed(2)) : 0}`}
               className="font-montrealMedium"
             />
             {getRating(
