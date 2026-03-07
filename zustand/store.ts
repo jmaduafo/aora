@@ -14,7 +14,7 @@ type CartStore = {
 type FilterReviewStore = {
   reviews: Review[];
   setReviews: (reviews: Review[]) => void;
-  filterItem: (type: string, order: string) => void;
+  filterItems: (type: string, order: string) => void;
 };
 
 type FilterProductStore = {
@@ -89,7 +89,7 @@ export const useFilterReviewStore = create<FilterReviewStore>()((set, get) => ({
       return { reviews: reviews };
     });
   },
-  filterItem: (type, order) => {
+  filterItems: (type, order) => {
     set((state) => {
       if (type === "date") {
         if (order === "asc") {
@@ -107,6 +107,28 @@ export const useFilterReviewStore = create<FilterReviewStore>()((set, get) => ({
                 new Date(b.createdAt).getTime() -
                 new Date(a.createdAt).getTime(),
             ),
+          };
+        }
+      } else if (type === "relevance") {
+        if (order === "asc") {
+          return {
+            reviews: state.reviews.toSorted((a, b) => {
+              if (a?.helpfuls && b?.helpfuls) {
+                return a.helpfuls.length - b.helpfuls.length;
+              }
+
+              return 0;
+            }),
+          };
+        } else {
+          return {
+            reviews: state.reviews.toSorted((a, b) => {
+              if (a?.helpfuls && b?.helpfuls) {
+                return b.helpfuls.length - a.helpfuls.length;
+              }
+
+              return 0;
+            }),
           };
         }
       } else if (type === "rating") {

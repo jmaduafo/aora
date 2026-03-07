@@ -99,36 +99,37 @@ function Shop({ allCategories, allProducts }: CategoryShop) {
                 })
               : null}
           </div>
-          {!!(categories?.length) && <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant={"ghost"}>
-                  <ArrowUpDown strokeWidth={1} />
-                  Sort by
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Sort</DropdownMenuLabel>
-                  {shopSort.map((item) => {
-                    return (
-                      <DropdownMenuItem
-                        key={`${item.type} ${item.order}`}
-                        onClick={() => sort(item.type, item.order)}
-                        className="capitalize"
-                      >
-                        <item.icon className="text-foreground group-hover:text-background" />{" "}
-                        {item.type}
-                      </DropdownMenuItem>
-                    );
-                  })}
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>}
+          {!!categories?.length && (
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant={"ghost"}>
+                    <ArrowUpDown strokeWidth={1} />
+                    Sort by
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>Sort</DropdownMenuLabel>
+                    {shopSort.map((item) => {
+                      return (
+                        <DropdownMenuItem
+                          key={`${item.type} ${item.order}`}
+                          onClick={() => sort(item.type, item.order)}
+                          className="capitalize"
+                        >
+                          <item.icon /> {item.type}
+                        </DropdownMenuItem>
+                      );
+                    })}
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
       </div>
-      {products?.length && category.length ? (
+      {!!products?.length && !!category.length && (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-6">
           {products?.map((item) => {
             return (
@@ -138,12 +139,17 @@ function Shop({ allCategories, allProducts }: CategoryShop) {
             );
           })}
         </div>
-      ) : (
+      )}
+      {!products.length && !category.length && (
         <div className="w-full h-[20vh] flex justify-center items-center">
           <Loading size="size-12" />
         </div>
       )}
-      {!products.length && !!category.length && <p>No products</p>}
+      {!products.length && !!category.length && (
+        <div className="mt-10">
+          <Paragraph text="No products found"/>
+        </div>
+      )}
     </>
   );
 }

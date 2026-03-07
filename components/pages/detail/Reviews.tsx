@@ -48,7 +48,13 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { Product } from "@/types/type";
-import { ages, skin_concerns, skin_tone, skin_type } from "@/utils/data";
+import {
+  ages,
+  reviewSort,
+  skin_concerns,
+  skin_tone,
+  skin_type,
+} from "@/utils/data";
 import {
   averageRating,
   formatText,
@@ -56,7 +62,10 @@ import {
   getRating,
   ratingRanking,
 } from "@/utils/helpers";
-import { ArrowRight, ListFilter } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpDown
+} from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -66,6 +75,15 @@ import * as z from "zod";
 import { createReview } from "@/prisma/actions";
 import { toast } from "sonner";
 import Loading from "@/components/ui/loading/Loading";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useFilterReviewStore } from "@/zustand/store";
 
 function Reviews({ product }: { readonly product: Product | undefined }) {
   const [isReviewOpen, setIsReviewOpen] = useState(false);
@@ -88,11 +106,19 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
     },
   });
 
+  const { filterItems, reviews, setReviews } = useFilterReviewStore();
+
   useEffect(() => {
     const user_id = localStorage.getItem("aora_id");
 
     user_id ? setUserId(user_id) : setUserId("");
   }, []);
+
+  useEffect(() => {
+    if (product?.reviews) {
+      setReviews(product.reviews);
+    }
+  }, [product]);
 
   async function onSubmit(data: z.infer<typeof ReviewSchema>) {
     setIsLoading(true);
@@ -154,6 +180,10 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
     }
   }
 
+  const sort = (type: string, order: string) => {
+    filterItems(type, order);
+  };
+
   return (
     <section className="mt-[15vh]">
       <div className="flex flex-col lg:flex-row gap-[5vw]">
@@ -164,31 +194,22 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
           />
           <div className="flex items-center gap-4 mt-[6vh]">
             <Header4
-              text={`${product?.reviews ? (Number.isNaN(averageRating(product?.reviews?.map((item) => item.rating))) ? "No reviews yet" : averageRating(product?.reviews?.map((item) => item.rating)).toFixed(2)) : 0}`}
+              text={`${Number.isNaN(averageRating(reviews.map((item) => item.rating))) ? "No reviews yet" : averageRating(reviews?.map((item) => item.rating)).toFixed(2)}`}
               className="font-montrealMedium"
             />
             {getRating(
-              product?.reviews
-                ? averageRating(product?.reviews?.map((item) => item.rating))
-                : 0,
+              reviews ? averageRating(reviews?.map((item) => item.rating)) : 0,
               "size-5",
             )}
           </div>
           <div className="grid gap-2 mt-5">
-            {product?.reviews
-              ? ratingRanking(product?.reviews?.map((item) => item.rating)).map(
-                  (item) => {
-                    return (
-                      <Fragment key={item.rating}>
-                        <RatingBar
-                          rating={item.rating}
-                          percentage={item.percent}
-                        />
-                      </Fragment>
-                    );
-                  },
-                )
-              : null}
+            {ratingRanking(reviews.map((item) => item.rating)).map((item) => {
+              return (
+                <Fragment key={item.rating}>
+                  <RatingBar rating={item.rating} percentage={item.percent} />
+                </Fragment>
+              );
+            })}
           </div>
         </div>
         <div className="flex-1">
@@ -556,20 +577,41 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
               </form>
             </DialogContent>
           </Dialog>
+          {/* SORT BY DROPDOWN MENU */}
           <div className="py-2 flex justify-end border-y-[1.5px] mt-5">
-            <Button variant={"ghost"}>
-              <ListFilter />
-              Filter
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant={"ghost"}>
+                  <ArrowUpDown strokeWidth={1} />
+                  Sort by
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-44">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>Sort</DropdownMenuLabel>
+                  {reviewSort.map((item) => {
+                    return (
+                      <DropdownMenuItem
+                        key={`${item.type} ${item.order}`}
+                        onClick={() => sort(item.type, item.order)}
+                        className="capitalize"
+                      >
+                        <item.icon /> {item.type}
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
           {/* REVIEW CARD RENDER */}
           <div>
-            {product?.reviews?.length ? (
-              product?.reviews?.map((item, i) => {
+            {reviews.length ? (
+              reviews.map((item, i) => {
                 return (
                   <div
                     key={item.id}
-                    className={`py-4 ${product?.reviews && i !== product?.reviews?.length - 1 && "border-b border-b-foreground/20"}`}
+                    className={`py-4 ${i !== reviews?.length - 1 && "border-b border-b-foreground/20"}`}
                   >
                     <ReviewCard user_id={userId} item={item} />
                   </div>
@@ -582,7 +624,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
             )}
           </div>
           {/* SHOW MORE BUTTON */}
-          {product?.reviews && product?.reviews?.length >= 3 && (
+          {reviews.length >= 3 && (
             <div className="mt-3">
               <PurchaseButton text="Show More" />
             </div>

@@ -6,6 +6,8 @@ import {
   ArrowDownWideNarrow,
   CalendarArrowDown,
   CalendarArrowUp,
+  ArrowDown01,
+  ArrowDown10,
 } from "lucide-react";
 
 export const services = [
@@ -259,6 +261,39 @@ export const shopSort = [
   },
   {
     type: "price",
+    order: "desc",
+    icon: ArrowDownWideNarrow,
+  },
+  {
+    type: "date",
+    order: "asc",
+    icon: CalendarArrowDown,
+  },
+  {
+    type: "date",
+    order: "desc",
+    icon: CalendarArrowUp,
+  },
+];
+
+export const reviewSort = [
+  {
+    type: "rating",
+    order: "asc",
+    icon: ArrowDown01,
+  },
+  {
+    type: "rating",
+    order: "desc",
+    icon: ArrowDown10,
+  },
+  {
+    type: "relevance",
+    order: "asc",
+    icon: ArrowDownNarrowWide,
+  },
+  {
+    type: "relevance",
     order: "desc",
     icon: ArrowDownWideNarrow,
   },
