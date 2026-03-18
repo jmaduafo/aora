@@ -62,10 +62,7 @@ import {
   getRating,
   ratingRanking,
 } from "@/utils/helpers";
-import {
-  ArrowRight,
-  ArrowUpDown
-} from "lucide-react";
+import { ArrowRight, ArrowUpDown } from "lucide-react";
 import React, { Fragment, useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa6";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -605,7 +602,7 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
             </DropdownMenu>
           </div>
           {/* REVIEW CARD RENDER */}
-          <div>
+          <div className="w-full">
             {reviews.length ? (
               reviews.map((item, i) => {
                 return (
@@ -622,13 +619,32 @@ function Reviews({ product }: { readonly product: Product | undefined }) {
                 <Header6 text="Be the first to review" />
               </div>
             )}
-          </div>
           {/* SHOW MORE BUTTON */}
-          {reviews.length >= 3 && (
-            <div className="mt-3">
-              <PurchaseButton text="Show More" />
-            </div>
+          {reviews.length === 1 && (
+            <Dialog>
+              <DialogTrigger className="w-full">
+                <Button variant={"custom"} size="lg" className="w-full">Show More</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-3xl">
+                <DialogHeader>
+                  <DialogTitle>Reviews ( {reviews.length} )</DialogTitle>
+                </DialogHeader>
+                <div>
+                  {reviews.map((item, i) => {
+                    return (
+                      <div
+                        key={item.id}
+                        className={`py-4 ${i !== reviews?.length - 1 && "border-b border-b-foreground/20"}`}
+                      >
+                        <ReviewCard user_id={userId} item={item} />
+                      </div>
+                    );
+                  })}
+                </div>
+              </DialogContent>
+            </Dialog>
           )}
+          </div>
         </div>
       </div>
     </section>

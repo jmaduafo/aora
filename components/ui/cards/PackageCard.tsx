@@ -5,6 +5,7 @@ import Header6 from "../headings/Header6";
 import Paragraph from "../headings/Paragraph";
 import PackageButton from "../buttons/PackageButton";
 import { shimmer, toBase64 } from "@/utils/blurDataUrl";
+import ImageEffect from "../animations/ImageEffect";
 
 type Card = {
   readonly item: Package;
@@ -13,18 +14,20 @@ type Card = {
 function PackageCard({ item }: Card) {
   return (
     <div>
-      <div className="w-full h-[55vh] sm:h-[45vh] object-cover object-bottom">
-        <Image
-          src={item.image}
-          alt={item.title}
-          className="w-full h-full"
-          width={200}
-          height={400}
-          blurDataURL={`data:image/svg+xml;base64,${toBase64(
-            shimmer(200, 400),
-          )}`}
-        />
-      </div>
+      <ImageEffect>
+        <div className="w-full h-[55vh] sm:h-[45vh] object-cover object-bottom">
+          <Image
+            src={item.image}
+            alt={item.title}
+            className="w-full h-full"
+            width={200}
+            height={400}
+            blurDataURL={`data:image/svg+xml;base64,${toBase64(
+              shimmer(200, 400),
+            )}`}
+          />
+        </div>
+      </ImageEffect>
       <div className="mt-3">
         <div className="flex justify-between gap-2">
           <Header6 text={item.title} />
